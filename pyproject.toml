@@ -1,0 +1,25 @@
+[project]
+name = "sih26103-infrastructure-ai"
+version = "0.1.0"
+description = "AI-Powered Predictive Analytics & Early-Warning System for Infrastructure Projects (MoSPI SIH26103 - PAIMANA/OCMS)"
+readme = "README.md"
+authors = [
+    { name = "Varshini arudra", email = "varshiniarudra7@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "dvc>=3.60.0",
+    "matplotlib>=3.8.0",
+    "numpy>=2.0.0",
+    "pandas>=2.2.0",
+    "pytest>=8.0.0",
+    "pyyaml>=6.0.0",
+    "seaborn>=0.13.0",
+]
+
+[project.scripts]
+sih26103-infrastructure-ai = "sih26103_infrastructure_ai:main"
+
+[build-system]
+requires = ["uv_build>=0.12.11,<0.13.0"]
+build-backend = "uv_build"

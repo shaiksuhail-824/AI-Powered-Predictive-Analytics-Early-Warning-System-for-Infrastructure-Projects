@@ -1,0 +1,20 @@
+# SIH26103 DVC Pipeline Configuration Parameters
+# Ministry of Statistics and Programme Implementation (MoSPI)
+# PAIMANA Time Overrun Early-Warning System
+
+preprocessing:
+  missing_threshold: 0.5            # Max fraction of allowed missing values per column
+  progress_min_clip: 0.0            # Lower bound for physical progress percentage
+  progress_max_clip: 100.0          # Upper bound for physical progress percentage
+  expenditure_ratio_max_clip: 500.0 # Upper bound for extreme expenditure ratios
+  drop_duplicates: true             # Deduplication policy
+
+feature_engineering:
+  scale_features: false             # Keep original interpretable units (Cr, Days, %)
+  lag_lead_cutoff_only: true        # Enforce temporal time T cutoff (no future leakage)
+  historical_agency_threshold: 5    # Minimum project count for historical agency stats
+  historical_state_threshold: 10    # Minimum project count for historical state stats
+
+targets:
+  delay_threshold_months: 1.0       # Threshold in months beyond which project is considered delayed
+  critical_delay_threshold: 12.0    # Threshold for high-risk / severe delay categorization (1 year)

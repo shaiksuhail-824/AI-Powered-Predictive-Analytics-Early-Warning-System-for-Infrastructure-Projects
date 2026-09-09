@@ -1,0 +1,56 @@
+stages:
+  ingest:
+    cmd: python src/data/ingest.py
+    deps:
+      - src/data/ingest.py
+    outs:
+      - data/raw/paimana_time_overrun.csv
+      - reports/source_metadata.md
+
+  validate:
+    cmd: python src/data/validate.py
+    deps:
+      - data/raw/paimana_time_overrun.csv
+      - src/data/validate.py
+    outs:
+      - data/interim/paimana_time_overrun_validated.csv
+      - reports/data_quality.md
+
+  eda:
+    cmd: python src/data/eda.py
+    deps:
+      - data/interim/paimana_time_overrun_validated.csv
+      - src/data/eda.py
+    outs:
+      - reports/figures
+      - reports/eda_report.md
+
+  preprocess:
+    cmd: python src/data/preprocess.py
+    deps:
+      - data/interim/paimana_time_overrun_validated.csv
+      - src/data/preprocess.py
+    params:
+      - preprocessing.missing_threshold
+      - preprocessing.progress_min_clip
+      - preprocessing.progress_max_clip
+      - preprocessing.expenditure_ratio_max_clip
+      - preprocessing.drop_duplicates
+    outs:
+      - data/processed/paimana_time_overrun_processed.csv
+
+  feature_engineering:
+    cmd: python src/data/feature_engineering.py
+    deps:
+      - data/processed/paimana_time_overrun_processed.csv
+      - src/data/feature_engineering.py
+    params:
+      - feature_engineering.scale_features
+      - feature_engineering.lag_lead_cutoff_only
+      - targets.delay_threshold_months
+    outs:
+      - data/features/paimana_cuf_baseline.csv
+      - data/features/paimana_ml_ready_time_overrun.csv
+      - reports/feature_dictionary.md
+      - reports/cuf_feature_mapping.md
+      - reports/data_leakage_audit.md

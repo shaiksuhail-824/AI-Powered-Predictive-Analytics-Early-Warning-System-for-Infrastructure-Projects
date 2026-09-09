@@ -1,0 +1,119 @@
+schema: '2.0'
+stages:
+  ingest:
+    cmd: python src/data/ingest.py
+    deps:
+    - path: src/data/ingest.py
+      hash: md5
+      md5: 45edf671e22997e61a10a9bc1f656d4e
+      size: 4471
+    outs:
+    - path: data/raw/paimana_time_overrun.csv
+      hash: md5
+      md5: c7c9afa3e2be45af772319deba7c70f0
+      size: 4610918
+    - path: reports/source_metadata.md
+      hash: md5
+      md5: eac5299b58dd8c49e26df5697c9cb18c
+      size: 2063
+  validate:
+    cmd: python src/data/validate.py
+    deps:
+    - path: data/raw/paimana_time_overrun.csv
+      hash: md5
+      md5: c7c9afa3e2be45af772319deba7c70f0
+      size: 4610918
+    - path: src/data/validate.py
+      hash: md5
+      md5: fdc6ef6303cca2b3e010582b48bd792d
+      size: 9505
+    outs:
+    - path: data/interim/paimana_time_overrun_validated.csv
+      hash: md5
+      md5: 173ecf9e7cb3c26bbe148255dcb66075
+      size: 4519159
+    - path: reports/data_quality.md
+      hash: md5
+      md5: 05f386e8c97355b129712dd9f7759c63
+      size: 5490
+  eda:
+    cmd: python src/data/eda.py
+    deps:
+    - path: data/interim/paimana_time_overrun_validated.csv
+      hash: md5
+      md5: 173ecf9e7cb3c26bbe148255dcb66075
+      size: 4519159
+    - path: src/data/eda.py
+      hash: md5
+      md5: caf5f6f287d0c6c9da540de992593014
+      size: 13431
+    outs:
+    - path: reports/eda_report.md
+      hash: md5
+      md5: 305f2246a3234548d539b50675ebb7ea
+      size: 4181
+    - path: reports/figures
+      hash: md5
+      md5: 7ddd3ad8a1e6363a33b30761c24f4f5e.dir
+      size: 1799393
+      nfiles: 5
+  preprocess:
+    cmd: python src/data/preprocess.py
+    deps:
+    - path: data/interim/paimana_time_overrun_validated.csv
+      hash: md5
+      md5: 173ecf9e7cb3c26bbe148255dcb66075
+      size: 4519159
+    - path: src/data/preprocess.py
+      hash: md5
+      md5: ccf0374b96f8fba8e8da712b5e34acb4
+      size: 3787
+    params:
+      params.yaml:
+        preprocessing.drop_duplicates: true
+        preprocessing.expenditure_ratio_max_clip: 500.0
+        preprocessing.missing_threshold: 0.5
+        preprocessing.progress_max_clip: 100.0
+        preprocessing.progress_min_clip: 0.0
+    outs:
+    - path: data/processed/paimana_time_overrun_processed.csv
+      hash: md5
+      md5: 9e3d067733becd0cb34512ac77ab4667
+      size: 4702662
+  feature_engineering:
+    cmd: python src/data/feature_engineering.py
+    deps:
+    - path: data/processed/paimana_time_overrun_processed.csv
+      hash: md5
+      md5: 9e3d067733becd0cb34512ac77ab4667
+      size: 4702662
+    - path: src/data/feature_engineering.py
+      hash: md5
+      md5: b9bd61168b11e0afc787ce92ab003b7a
+      size: 19236
+    params:
+      params.yaml:
+        feature_engineering.lag_lead_cutoff_only: true
+        feature_engineering.scale_features: false
+        targets.delay_threshold_months: 1.0
+    outs:
+    - path: data/features/paimana_cuf_baseline.csv
+      hash: md5
+      md5: 57539d7c78ac8f953e42b2fbd7a73916
+      size: 1876994
+    - path: data/features/paimana_ml_ready_time_overrun.csv
+      hash: md5
+      md5: 0037f8fc98c52e9f9f658c0ef6a58a8d
+      size: 5101533
+    - path: reports/cuf_feature_mapping.md
+      hash: md5
+      md5: 8519f5cc1a92eaef7b1ac321d7ea25ab
+      size: 3449
+    - path: reports/data_leakage_audit.md
+      hash: md5
+      md5: 757fc4679918caa93d86d49b7f7c536c
+      size: 4286
+    - path: reports/feature_dictionary.md
+      hash: md5
+      md5: d7bc6552339856a24faf455a37d52421
+      size: 4408
