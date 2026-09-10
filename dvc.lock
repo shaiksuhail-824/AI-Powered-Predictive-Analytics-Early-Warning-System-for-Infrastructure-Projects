@@ -117,3 +117,123 @@ stages:
       hash: md5
       md5: d7bc6552339856a24faf455a37d52421
       size: 4408
+  train:
+    cmd: python -m src.ml.train
+    deps:
+    - path: configs/model_params.yaml
+      hash: md5
+      md5: 693c42947dfa8d5e6a73eece9b338c06
+      size: 2542
+    - path: data/features/paimana_ml_ready_time_overrun.csv
+      hash: md5
+      md5: 0037f8fc98c52e9f9f658c0ef6a58a8d
+      size: 5101533
+    - path: src/ml/feature_pipeline.py
+      hash: md5
+      md5: 6ebd32770d4d953c6e009aa698e3f4fa
+      size: 7271
+    - path: src/ml/train.py
+      hash: md5
+      md5: 6cb09d0371a74dd47424fa0e0a5a8614
+      size: 11859
+    outs:
+    - path: reports/training_run_summary.csv
+      hash: md5
+      md5: 0195f46bb73a760c2417227c52bcb7a3
+      size: 3680
+  model_selection:
+    cmd: python -m src.ml.model_selection
+    deps:
+    - path: reports/training_run_summary.csv
+      hash: md5
+      md5: 0195f46bb73a760c2417227c52bcb7a3
+      size: 3680
+    - path: src/ml/model_selection.py
+      hash: md5
+      md5: 7bdab24adeea1675dd2a7ada3a1ce667
+      size: 5095
+    outs:
+    - path: models/cost_overrun/production_model.pkl
+      hash: md5
+      md5: 6fa81fe17c771018f013666f342d4716
+      size: 1433756
+    - path: models/schedule_delay/production_model.pkl
+      hash: md5
+      md5: 1863c6422569195c81cc1711f5f8d24f
+      size: 2785
+    - path: models/selected_models_summary.json
+      hash: md5
+      md5: f3e4dffcac78ec6e80e0d7a95fd7db3e
+      size: 1183
+  anomaly_sentinel:
+    cmd: python -m src.ml.anomaly_detection
+    deps:
+    - path: configs/model_params.yaml
+      hash: md5
+      md5: 693c42947dfa8d5e6a73eece9b338c06
+      size: 2542
+    - path: data/features/paimana_ml_ready_time_overrun.csv
+      hash: md5
+      md5: 0037f8fc98c52e9f9f658c0ef6a58a8d
+      size: 5101533
+    - path: src/ml/anomaly_detection.py
+      hash: md5
+      md5: d36aca4399a498068308209165aae1ce
+      size: 5881
+    outs:
+    - path: models/anomaly_detector/production_anomaly_detector.pkl
+      hash: md5
+      md5: 584daf7fe205371bd8f0425bbe8b1c43
+      size: 993915
+  evaluate:
+    cmd: python -m src.ml.evaluate
+    deps:
+    - path: models/cost_overrun/production_model.pkl
+      hash: md5
+      md5: 6fa81fe17c771018f013666f342d4716
+      size: 1433756
+    - path: models/schedule_delay/production_model.pkl
+      hash: md5
+      md5: 1863c6422569195c81cc1711f5f8d24f
+      size: 2785
+    - path: reports/training_run_summary.csv
+      hash: md5
+      md5: 0195f46bb73a760c2417227c52bcb7a3
+      size: 3680
+    - path: src/ml/evaluate.py
+      hash: md5
+      md5: 4c0949ebf21182c88696780062630661
+      size: 7729
+    outs:
+    - path: reports/cuf_vs_enhanced_comparison.csv
+      hash: md5
+      md5: ef99ded1d82bb83bf2c523819213a8ac
+      size: 1291
+    - path: reports/overfitting_underfitting_summary.csv
+      hash: md5
+      md5: 1962ae75dcb193becdc49af1df32090f
+      size: 4158
+  register:
+    cmd: python -m src.mlops.register_model
+    deps:
+    - path: models/anomaly_detector/production_anomaly_detector.pkl
+      hash: md5
+      md5: 584daf7fe205371bd8f0425bbe8b1c43
+      size: 993915
+    - path: models/cost_overrun/production_model.pkl
+      hash: md5
+      md5: 6fa81fe17c771018f013666f342d4716
+      size: 1433756
+    - path: models/schedule_delay/production_model.pkl
+      hash: md5
+      md5: 1863c6422569195c81cc1711f5f8d24f
+      size: 2785
+    - path: src/mlops/register_model.py
+      hash: md5
+      md5: 33555088a17ae68a5e2f9252dd124a36
+      size: 5886
+    outs:
+    - path: reports/mlops_registry_catalog.json
+      hash: md5
+      md5: 2f6ba8d1caa67fbc046205f07dcf7e20
+      size: 1381

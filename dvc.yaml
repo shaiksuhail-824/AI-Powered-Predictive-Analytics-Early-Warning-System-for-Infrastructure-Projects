@@ -54,3 +54,53 @@ stages:
       - reports/feature_dictionary.md
       - reports/cuf_feature_mapping.md
       - reports/data_leakage_audit.md
+
+  train:
+    cmd: python -m src.ml.train
+    deps:
+      - data/features/paimana_ml_ready_time_overrun.csv
+      - configs/model_params.yaml
+      - src/ml/feature_pipeline.py
+      - src/ml/train.py
+    outs:
+      - reports/training_run_summary.csv
+
+  model_selection:
+    cmd: python -m src.ml.model_selection
+    deps:
+      - reports/training_run_summary.csv
+      - src/ml/model_selection.py
+    outs:
+      - models/schedule_delay/production_model.pkl
+      - models/cost_overrun/production_model.pkl
+      - models/selected_models_summary.json
+
+  anomaly_sentinel:
+    cmd: python -m src.ml.anomaly_detection
+    deps:
+      - data/features/paimana_ml_ready_time_overrun.csv
+      - configs/model_params.yaml
+      - src/ml/anomaly_detection.py
+    outs:
+      - models/anomaly_detector/production_anomaly_detector.pkl
+
+  evaluate:
+    cmd: python -m src.ml.evaluate
+    deps:
+      - reports/training_run_summary.csv
+      - models/schedule_delay/production_model.pkl
+      - models/cost_overrun/production_model.pkl
+      - src/ml/evaluate.py
+    outs:
+      - reports/overfitting_underfitting_summary.csv
+      - reports/cuf_vs_enhanced_comparison.csv
+
+  register:
+    cmd: python -m src.mlops.register_model
+    deps:
+      - models/schedule_delay/production_model.pkl
+      - models/cost_overrun/production_model.pkl
+      - models/anomaly_detector/production_anomaly_detector.pkl
+      - src/mlops/register_model.py
+    outs:
+      - reports/mlops_registry_catalog.json
