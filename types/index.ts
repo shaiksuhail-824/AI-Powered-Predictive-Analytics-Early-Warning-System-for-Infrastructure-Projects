@@ -28,13 +28,17 @@ export interface Project {
   sector: string;
   originalCost: number;
   revisedCost: number;
+  startDate?: string;
   originalCompletionDate: string;
   revisedCompletionDate: string;
   physicalProgress: number;
+  plannedProgress: number;
   expenditure: number;
   status: ProjectStatus;
   riskScore: number;
   riskLevel: RiskLevel;
+  costOverrunRisk?: number;
+  timeOverrunRisk?: number;
 }
 
 export interface LegacyProject extends Project {
@@ -95,4 +99,14 @@ export interface ActionTicket {
   dueDate: string;
   action: string;
   status: TicketStatus;
+}
+
+export interface BenchmarkData {
+  projectId: string;
+  stateAverageRisk: number;
+  sectorAverageRisk: number;
+  ministryAverageRisk: number;
+  stateAverageProgress: number;
+  sectorAverageProgress: number;
+  ministryAverageProgress: number;
 }

@@ -230,6 +230,332 @@ export const mockProjects: Project[] = [
     riskScore: 58,
     riskLevel: 'Medium',
   },
+  {
+    projectId: 'PRJ-013',
+    projectName: 'Kolkata East-West Metro Corridor',
+    ministry: 'Ministry of Railways',
+    agency: 'KMRCL',
+    state: 'West Bengal',
+    sector: 'Urban Transport',
+    originalCost: 8575,
+    revisedCost: 10985,
+    originalCompletionDate: '2022-03-31',
+    revisedCompletionDate: '2026-12-31',
+    physicalProgress: 88,
+    plannedProgress: 100,
+    expenditure: 9500,
+    status: 'Delayed',
+    riskScore: 68,
+    riskLevel: 'High',
+  },
+  {
+    projectId: 'PRJ-014',
+    projectName: 'Bhakra Nangal Dam Modernization',
+    ministry: 'Ministry of Power',
+    agency: 'BBMB',
+    state: 'Punjab',
+    sector: 'Power',
+    originalCost: 4500,
+    revisedCost: 4500,
+    originalCompletionDate: '2025-10-31',
+    revisedCompletionDate: '2025-10-31',
+    physicalProgress: 45,
+    plannedProgress: 42,
+    expenditure: 2100,
+    status: 'On Track',
+    riskScore: 22,
+    riskLevel: 'Low',
+  },
+  {
+    projectId: 'PRJ-015',
+    projectName: 'Hyderabad Regional Ring Road',
+    ministry: 'Ministry of Road Transport and Highways',
+    agency: 'NHAI',
+    state: 'Telangana',
+    sector: 'Roads',
+    originalCost: 17000,
+    revisedCost: 20000,
+    originalCompletionDate: '2027-03-31',
+    revisedCompletionDate: '2028-06-30',
+    physicalProgress: 15,
+    plannedProgress: 35,
+    expenditure: 4500,
+    status: 'Critical',
+    riskScore: 88,
+    riskLevel: 'Critical',
+    costOverrunRisk: 92,
+    timeOverrunRisk: 85
+  },
+  {
+    projectId: 'PRJ-016',
+    projectName: 'Vizhinjam International Seaport',
+    ministry: 'Ministry of Ports, Shipping and Waterways',
+    agency: 'Adani Ports',
+    state: 'Kerala',
+    sector: 'Ports',
+    originalCost: 7525,
+    revisedCost: 7525,
+    originalCompletionDate: '2024-12-31',
+    revisedCompletionDate: '2025-05-31',
+    physicalProgress: 82,
+    plannedProgress: 90,
+    expenditure: 6800,
+    status: 'Watch',
+    riskScore: 45,
+    riskLevel: 'Medium',
+  },
+  {
+    projectId: 'PRJ-017',
+    projectName: 'Kashi Vishwanath Corridor Phase 2',
+    ministry: 'Ministry of Culture',
+    agency: 'UP PWD',
+    state: 'Uttar Pradesh',
+    sector: 'Social Infrastructure',
+    originalCost: 800,
+    revisedCost: 800,
+    originalCompletionDate: '2025-12-31',
+    revisedCompletionDate: '2025-12-31',
+    physicalProgress: 35,
+    plannedProgress: 30,
+    expenditure: 250,
+    status: 'On Track',
+    riskScore: 18,
+    riskLevel: 'Low',
+  },
+  {
+    projectId: 'PRJ-018',
+    projectName: 'Patna Medical College Expansion',
+    ministry: 'Ministry of Health and Family Welfare',
+    agency: 'BMSICL',
+    state: 'Bihar',
+    sector: 'Health',
+    originalCost: 5540,
+    revisedCost: 6100,
+    originalCompletionDate: '2026-03-31',
+    revisedCompletionDate: '2027-03-31',
+    physicalProgress: 28,
+    plannedProgress: 45,
+    expenditure: 1200,
+    status: 'Delayed',
+    riskScore: 75,
+    riskLevel: 'High',
+  },
+  {
+    projectId: 'PRJ-019',
+    projectName: 'Ahmedabad-Dholera Expressway',
+    ministry: 'Ministry of Road Transport and Highways',
+    agency: 'NHAI',
+    state: 'Gujarat',
+    sector: 'Roads',
+    originalCost: 3500,
+    revisedCost: 3500,
+    originalCompletionDate: '2024-08-31',
+    revisedCompletionDate: '2025-01-31',
+    physicalProgress: 92,
+    plannedProgress: 95,
+    expenditure: 3200,
+    status: 'Watch',
+    riskScore: 35,
+    riskLevel: 'Low',
+  },
+  {
+    projectId: 'PRJ-020',
+    projectName: 'Gati Shakti Multimodal Terminal',
+    ministry: 'Ministry of Railways',
+    agency: 'Indian Railways',
+    state: 'Madhya Pradesh',
+    sector: 'Railways',
+    originalCost: 1200,
+    revisedCost: 1200,
+    originalCompletionDate: '2025-12-31',
+    revisedCompletionDate: '2025-12-31',
+    physicalProgress: 60,
+    plannedProgress: 55,
+    expenditure: 680,
+    status: 'On Track',
+    riskScore: 25,
+    riskLevel: 'Low',
+  },
+  {
+    projectId: 'PRJ-021',
+    projectName: 'Subansiri Lower Hydroelectric Project',
+    ministry: 'Ministry of Power',
+    agency: 'NHPC',
+    state: 'Arunachal Pradesh',
+    sector: 'Power',
+    originalCost: 6285,
+    revisedCost: 19992,
+    originalCompletionDate: '2014-12-31',
+    revisedCompletionDate: '2025-08-31',
+    physicalProgress: 94,
+    plannedProgress: 100,
+    expenditure: 18500,
+    status: 'Critical',
+    riskScore: 82,
+    riskLevel: 'High',
+  },
+  {
+    projectId: 'PRJ-022',
+    projectName: 'Pune Ring Road',
+    ministry: 'Ministry of Road Transport and Highways',
+    agency: 'MSRDC',
+    state: 'Maharashtra',
+    sector: 'Roads',
+    originalCost: 15857,
+    revisedCost: 17500,
+    originalCompletionDate: '2026-12-31',
+    revisedCompletionDate: '2027-12-31',
+    physicalProgress: 12,
+    plannedProgress: 25,
+    expenditure: 3500,
+    status: 'Delayed',
+    riskScore: 70,
+    riskLevel: 'High',
+  },
+  {
+    projectId: 'PRJ-023',
+    projectName: 'Amaravati Smart City Infrastructure',
+    ministry: 'Ministry of Housing and Urban Affairs',
+    agency: 'APCRDA',
+    state: 'Andhra Pradesh',
+    sector: 'Urban Transport',
+    originalCost: 25000,
+    revisedCost: 28000,
+    originalCompletionDate: '2028-12-31',
+    revisedCompletionDate: '2029-12-31',
+    physicalProgress: 5,
+    plannedProgress: 15,
+    expenditure: 1200,
+    status: 'Watch',
+    riskScore: 55,
+    riskLevel: 'Medium',
+  },
+  {
+    projectId: 'PRJ-024',
+    projectName: 'Thiruvananthapuram Outer Ring Road',
+    ministry: 'Ministry of Road Transport and Highways',
+    agency: 'NHAI',
+    state: 'Kerala',
+    sector: 'Roads',
+    originalCost: 4800,
+    revisedCost: 4800,
+    originalCompletionDate: '2026-06-30',
+    revisedCompletionDate: '2026-06-30',
+    physicalProgress: 30,
+    plannedProgress: 28,
+    expenditure: 1400,
+    status: 'On Track',
+    riskScore: 28,
+    riskLevel: 'Low',
+  },
+  {
+    projectId: 'PRJ-025',
+    projectName: 'Guwahati Metro Project',
+    ministry: 'Ministry of Housing and Urban Affairs',
+    agency: 'GMDA',
+    state: 'Assam',
+    sector: 'Urban Transport',
+    originalCost: 18000,
+    revisedCost: 21000,
+    originalCompletionDate: '2029-03-31',
+    revisedCompletionDate: '2030-12-31',
+    physicalProgress: 2,
+    plannedProgress: 10,
+    expenditure: 800,
+    status: 'Delayed',
+    riskScore: 65,
+    riskLevel: 'Medium',
+  },
+  {
+    projectId: 'PRJ-026',
+    projectName: 'Durgapur Steel Plant Expansion',
+    ministry: 'Ministry of Steel',
+    agency: 'SAIL',
+    state: 'West Bengal',
+    sector: 'Steel',
+    originalCost: 8500,
+    revisedCost: 8500,
+    originalCompletionDate: '2025-06-30',
+    revisedCompletionDate: '2025-09-30',
+    physicalProgress: 68,
+    plannedProgress: 75,
+    expenditure: 5500,
+    status: 'Watch',
+    riskScore: 48,
+    riskLevel: 'Medium',
+  },
+  {
+    projectId: 'PRJ-027',
+    projectName: 'Indore-Manmad Rail Line',
+    ministry: 'Ministry of Railways',
+    agency: 'Indian Railways',
+    state: 'Madhya Pradesh',
+    sector: 'Railways',
+    originalCost: 8900,
+    revisedCost: 8900,
+    originalCompletionDate: '2028-12-31',
+    revisedCompletionDate: '2028-12-31',
+    physicalProgress: 40,
+    plannedProgress: 38,
+    expenditure: 3200,
+    status: 'On Track',
+    riskScore: 32,
+    riskLevel: 'Low',
+  },
+  {
+    projectId: 'PRJ-028',
+    projectName: 'Zuari Bridge Phase 2',
+    ministry: 'Ministry of Road Transport and Highways',
+    agency: 'PWD Goa',
+    state: 'Goa',
+    sector: 'Roads',
+    originalCost: 2500,
+    revisedCost: 2800,
+    originalCompletionDate: '2025-06-30',
+    revisedCompletionDate: '2026-03-31',
+    physicalProgress: 60,
+    plannedProgress: 75,
+    expenditure: 1600,
+    status: 'Delayed',
+    riskScore: 61,
+    riskLevel: 'High',
+  },
+  {
+    projectId: 'PRJ-029',
+    projectName: 'Delhi Metro Phase 4',
+    ministry: 'Ministry of Housing and Urban Affairs',
+    agency: 'DMRC',
+    state: 'Delhi',
+    sector: 'Urban Transport',
+    originalCost: 35000,
+    revisedCost: 35000,
+    originalCompletionDate: '2026-12-31',
+    revisedCompletionDate: '2027-12-31',
+    physicalProgress: 42,
+    plannedProgress: 50,
+    expenditure: 12000,
+    status: 'Watch',
+    riskScore: 55,
+    riskLevel: 'Medium',
+  },
+  {
+    projectId: 'PRJ-030',
+    projectName: 'Zojila Tunnel Construction',
+    ministry: 'Ministry of Road Transport and Highways',
+    agency: 'NHIDCL',
+    state: 'Jammu and Kashmir',
+    sector: 'Roads',
+    originalCost: 6800,
+    revisedCost: 8500,
+    originalCompletionDate: '2026-12-31',
+    revisedCompletionDate: '2027-12-31',
+    physicalProgress: 35,
+    plannedProgress: 40,
+    expenditure: 2800,
+    status: 'Critical',
+    riskScore: 82,
+    riskLevel: 'Critical',
+  }
 ];
 
 export const mockRiskAnalysis: RiskAnalysis[] = [
@@ -361,4 +687,91 @@ export const getMockHistoricalData = (projectId: string): MonthlyMonitoring[] =>
       milestoneStatus: index % 4 === 0 ? 'Delayed' : 'On Track',
     };
   });
+};
+
+// ==========================================
+// FRONTEND SERVICE LAYER (MOCK API)
+// ==========================================
+
+export const getProjects = (): Project[] => {
+  return mockProjects;
+};
+
+export const getProjectsByState = (state: string): Project[] => {
+  return mockProjects.filter(p => p.state.toLowerCase() === state.toLowerCase());
+};
+
+export const getProjectByCode = (projectCode: string): Project | undefined => {
+  return mockProjects.find(p => p.projectId === projectCode);
+};
+
+export const getProjectHistory = (projectCode: string): MonthlyMonitoring[] => {
+  return getMockHistoricalData(projectCode);
+};
+
+export const getProjectRisk = (projectCode: string): RiskAnalysis | undefined => {
+  // If specific risk doesn't exist in mock, generate a deterministic one based on the project
+  const existing = mockRiskAnalysis.find(r => r.projectId === projectCode);
+  if (existing) return existing;
+  
+  const p = getProjectByCode(projectCode);
+  if (!p) return undefined;
+  
+  return {
+    projectId: projectCode,
+    costRisk: p.costOverrunRisk || p.riskScore + 5,
+    timeRisk: p.timeOverrunRisk || p.riskScore + 10,
+    overallRisk: p.riskScore,
+    riskLevel: p.riskLevel,
+    predictedDelay: p.riskScore > 60 ? Math.round(p.riskScore / 10) : 0,
+    riskTrend: [p.riskScore - 15, p.riskScore - 10, p.riskScore - 5, p.riskScore, p.riskScore + 2, p.riskScore],
+    drivers: [
+      { factor: 'Schedule slippage against planned milestones', impact: Math.round(p.riskScore * 0.8) },
+      { factor: 'Expenditure rate vs physical progress gap', impact: Math.round(p.riskScore * 0.6) },
+      { factor: 'Recent month-over-month stagnation', impact: Math.round(p.riskScore * 0.4) },
+    ],
+    recommendations: ['Conduct immediate project review', 'Audit contractor timeline'],
+  };
+};
+
+export const getProjectAlerts = (projectCode: string): Alert[] => {
+  return mockAlerts.filter(a => a.projectId === projectCode);
+};
+
+export const getBenchmarkData = (projectCode: string): BenchmarkData => {
+  const p = getProjectByCode(projectCode);
+  return {
+    projectId: projectCode,
+    stateAverageRisk: 45,
+    sectorAverageRisk: 52,
+    ministryAverageRisk: 48,
+    stateAverageProgress: 60,
+    sectorAverageProgress: 55,
+    ministryAverageProgress: 58,
+  };
+};
+
+export const getStateStatistics = (state: string) => {
+  const stateProjects = getProjectsByState(state);
+  const totalProjects = stateProjects.length;
+  const highRiskProjects = stateProjects.filter(p => p.riskLevel === 'High' || p.riskLevel === 'Critical').length;
+  const costRiskProjects = stateProjects.filter(p => (p.costOverrunRisk || p.riskScore) > 60).length;
+  const timeRiskProjects = stateProjects.filter(p => (p.timeOverrunRisk || p.riskScore) > 60).length;
+  
+  // Aggregate sector distribution
+  const sectors: Record<string, number> = {};
+  stateProjects.forEach(p => {
+    sectors[p.sector] = (sectors[p.sector] || 0) + 1;
+  });
+  
+  return {
+    totalProjects,
+    highRiskProjects,
+    costRiskProjects,
+    timeRiskProjects,
+    sectorDistribution: Object.entries(sectors).map(([name, value]) => ({ name, value })),
+    averageRisk: stateProjects.length > 0 
+      ? Math.round(stateProjects.reduce((acc, p) => acc + p.riskScore, 0) / stateProjects.length) 
+      : 0
+  };
 };

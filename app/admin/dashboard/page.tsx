@@ -4,22 +4,27 @@ import { mockProjects, mockAlerts } from '../../../data/mockData';
 import { Card, MetricCard } from '../../../components/ui/Cards';
 import { RiskBadge } from '../../../components/ui/RiskBadge';
 import { RiskTrendChart } from '../../../components/charts/RiskTrendChart';
+import { IndiaMapInteractive } from '../../../components/dashboard/IndiaMapInteractive';
 import { FolderKanban, AlertTriangle, Clock, TrendingUp, Search } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
+import { useAppStore } from '../../../store/appStore';
 
 export default function AdminDashboard() {
   const [searchTerm, setSearchTerm] = useState('');
+  const { filters } = useAppStore();
   
   const totalProjects = mockProjects.length;
   const highRiskProjects = mockProjects.filter(p => p.riskLevel === 'High' || p.riskLevel === 'Critical');
   const delayedProjects = mockProjects.filter(p => p.status === 'Delayed' || p.status === 'Critical');
   const activeAlerts = mockAlerts.filter(a => a.status !== 'Resolved');
 
-  const filteredProjects = mockProjects.filter(p => 
-    p.projectName.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    p.projectId.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredProjects = mockProjects.filter(p => {
+    const searchMatch = p.projectName.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                        p.projectId.toLowerCase().includes(searchTerm.toLowerCase());
+    const stateMatch = filters.state === 'All' || p.state === filters.state;
+    return searchMatch && stateMatch;
+  });
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
@@ -47,22 +52,22 @@ export default function AdminDashboard() {
           <Card className="p-6">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-lg font-bold text-text-primary">India Project Risk Map (Mock)</h2>
-              <Link href="/admin/state/maharashtra" className="text-sm text-mospi-600 font-medium hover:underline">
-                View Maharashtra →
-              </Link>
+              {filters.state !== 'All' && (
+                <Link href={`/admin/state/${filters.state.toLowerCase().replace(/\s+/g, '-')}`} className="text-sm text-mospi-600 font-medium hover:underline">
+                  View Detailed {filters.state} Report →
+                </Link>
+              )}
             </div>
-            <div className="h-[400px] w-full bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-center overflow-hidden relative">
-               <div className="text-center text-text-muted">
-                 <MapPlaceholder />
-                 <p className="mt-4 text-sm font-medium">Map Visualization Area</p>
-                 <p className="text-xs max-w-xs mx-auto mt-2">In the full version, clicking a state will navigate to the state view.</p>
-               </div>
+            <div className="h-[500px] w-full bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-center overflow-hidden relative">
+               <IndiaMapInteractive />
             </div>
           </Card>
 
           <Card className="p-6">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-bold text-text-primary">High-Risk Projects</h2>
+              <h2 className="text-lg font-bold text-text-primary">
+                {filters.state === 'All' ? 'National Project Overview' : `Projects in ${filters.state}`}
+              </h2>
               <div className="relative w-64">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted w-4 h-4" />
                 <input 
@@ -90,7 +95,7 @@ export default function AdminDashboard() {
                   {filteredProjects.slice(0, 5).map((project) => (
                     <tr key={project.projectId} className="hover:bg-slate-50 transition-colors">
                       <td className="px-4 py-3 font-medium text-mospi-600 hover:underline cursor-pointer">
-                        <Link href={`/projects/${project.projectId}`}>{project.projectId}</Link>
+                        <Link href={`/admin/project/${project.projectId}`}>{project.projectId}</Link>
                       </td>
                       <td className="px-4 py-3 font-medium text-text-primary max-w-[200px] truncate" title={project.projectName}>
                         {project.projectName}
@@ -149,14 +154,5 @@ export default function AdminDashboard() {
         </div>
       </div>
     </div>
-  );
-}
-
-function MapPlaceholder() {
-  return (
-    <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="mx-auto text-slate-300">
-      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-      <circle cx="12" cy="11" r="3"></circle>
-    </svg>
   );
 }
