@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { mockProjects } from '../../data/mockData';
 import { Card } from '../../components/ui/Cards';
 import { RiskBadge } from '../../components/ui/RiskBadge';
@@ -7,12 +8,23 @@ import { BarChart3, Layers } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 export default function BenchmarkingPage() {
-  const chartData = [
-    { name: 'Roads', total: mockProjects.filter(p=>p.sector==='Roads').length, avgRisk: 54 },
-    { name: 'Railways', total: mockProjects.filter(p=>p.sector==='Railways').length, avgRisk: 85 },
-    { name: 'Power', total: mockProjects.filter(p=>p.sector==='Power').length, avgRisk: 48 },
-    { name: 'Urban Transport', total: mockProjects.filter(p=>p.sector==='Urban Transport').length, avgRisk: 60 },
-  ];
+  const chartData = useMemo(() => {
+    const sectorStats: Record<string, { count: number; totalRisk: number }> = {};
+    mockProjects.forEach(p => {
+      const sec = (p.agency || p.sector || 'Infrastructure').replace(' Sector', '');
+      if (!sectorStats[sec]) sectorStats[sec] = { count: 0, totalRisk: 0 };
+      sectorStats[sec].count += 1;
+      sectorStats[sec].totalRisk += p.riskScore;
+    });
+    return Object.entries(sectorStats)
+      .sort((a, b) => b[1].count - a[1].count)
+      .slice(0, 6)
+      .map(([name, stat]) => ({
+        name,
+        total: stat.count,
+        avgRisk: Math.round(stat.totalRisk / stat.count),
+      }));
+  }, []);
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">

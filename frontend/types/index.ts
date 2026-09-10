@@ -17,7 +17,9 @@ export interface User {
   role: Role;
   organizationId?: string;
   assignedProjectIds?: string[];
+  scopedAgency?: string;
 }
+
 
 export interface Project {
   projectId: string;
@@ -39,6 +41,14 @@ export interface Project {
   riskLevel: RiskLevel;
   costOverrunRisk?: number;
   timeOverrunRisk?: number;
+  costOverrunProbability?: number;
+  scheduleDelayProbability?: number;
+  currentExpenditure?: number;
+  totalBudget?: number;
+  anomalyStatus?: string;
+  interventionPriority?: string;
+  timeOverrunDays?: number;
+  dataStatus?: string;
 }
 
 export interface LegacyProject extends Project {

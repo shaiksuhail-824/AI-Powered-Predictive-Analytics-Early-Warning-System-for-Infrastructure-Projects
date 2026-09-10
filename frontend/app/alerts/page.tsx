@@ -3,10 +3,29 @@
 import { mockAlerts, mockActionTickets } from '../../data/mockData';
 import { Card } from '../../components/ui/Cards';
 import { BellRing, Plus } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { apiClient } from '../../services/api';
+import { Alert } from '../../types';
 
 export default function AlertsPage() {
   const [activeTab, setActiveTab] = useState<'alerts' | 'tickets'>('alerts');
+  const [alerts, setAlerts] = useState<Alert[]>(mockAlerts);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function fetchAlerts() {
+      try {
+        const liveAlerts = await apiClient.getAlerts({ limit: 50 });
+        if (isMounted && liveAlerts.length > 0) {
+          setAlerts(liveAlerts);
+        }
+      } catch (err) {
+        console.warn('Live alerts fetch error, using preloaded alerts:', err);
+      }
+    }
+    fetchAlerts();
+    return () => { isMounted = false; };
+  }, []);
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
@@ -23,7 +42,7 @@ export default function AlertsPage() {
           onClick={() => setActiveTab('alerts')}
           className={`py-3 px-4 font-medium text-sm transition-colors border-b-2 ${activeTab === 'alerts' ? 'border-mospi-500 text-mospi-600' : 'border-transparent text-text-muted hover:text-text-primary'}`}
         >
-          AI Alerts ({mockAlerts.length})
+          AI Alerts ({alerts.length})
         </button>
         <button 
           onClick={() => setActiveTab('tickets')}
@@ -48,7 +67,7 @@ export default function AlertsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border bg-white">
-                {mockAlerts.map((alert) => (
+                {alerts.map((alert) => (
                   <tr key={alert.alertId} className="hover:bg-slate-50 transition-colors">
                     <td className="px-6 py-4 font-medium text-text-primary">{alert.alertId}</td>
                     <td className="px-6 py-4 text-text-secondary">{alert.projectId}</td>

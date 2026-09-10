@@ -14,6 +14,8 @@ import { useRouter } from 'next/navigation';
 export default function ProjectsPage() {
   const { user, isAuthenticated } = useAuthStore();
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 20;
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
 
@@ -39,6 +41,9 @@ export default function ProjectsPage() {
     p.projectId.toLowerCase().includes(searchTerm.toLowerCase()) ||
     p.state.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const totalPages = Math.ceil(filteredProjects.length / pageSize) || 1;
+  const paginatedProjects = filteredProjects.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -86,7 +91,7 @@ export default function ProjectsPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border bg-white">
-                    {filteredProjects.map((project) => (
+                    {paginatedProjects.map((project) => (
                       <tr key={project.projectId} className="hover:bg-slate-50 transition-colors">
                         <td className="px-6 py-4 font-medium text-mospi-600 hover:underline whitespace-nowrap">
                           <Link href={`/projects/${project.projectId}`}>{project.projectId}</Link>
@@ -118,6 +123,32 @@ export default function ProjectsPage() {
                 {filteredProjects.length === 0 && (
                   <div className="py-8 text-center text-text-muted text-sm">No projects found.</div>
                 )}
+              </div>
+
+              {/* Pagination footer */}
+              <div className="p-4 border-t border-border bg-slate-50 flex justify-between items-center text-sm">
+                <span className="text-text-muted">
+                  Showing {(currentPage - 1) * pageSize + 1} to {Math.min(currentPage * pageSize, filteredProjects.length)} of {filteredProjects.length} projects
+                </span>
+                <div className="flex gap-2">
+                  <button
+                    disabled={currentPage <= 1}
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    className="px-3 py-1.5 border border-border rounded bg-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50"
+                  >
+                    Previous
+                  </button>
+                  <span className="px-3 py-1.5 font-medium text-text-primary">
+                    {currentPage} / {totalPages}
+                  </span>
+                  <button
+                    disabled={currentPage >= totalPages}
+                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                    className="px-3 py-1.5 border border-border rounded bg-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50"
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
             </Card>
           </div>

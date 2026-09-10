@@ -1,12 +1,27 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps';
 import { getStateStatistics, normalizeStateName } from '../../data/mockData';
 import { useAppStore } from '../../store/appStore';
 import { StateStats } from '../../types';
 import { MousePointer2, Hand, ExternalLink, RotateCcw } from 'lucide-react';
 import Link from 'next/link';
+import { apiClient } from '../../services/api';
+
+export interface StateSummaryItem {
+  stateName: string;
+  totalProjects: number;
+  highRiskProjects: number;
+  criticalRiskProjects: number;
+  delayedProjects: number;
+  averageRiskScore: number;
+  dominantRiskLevel: string;
+}
+
+export interface IndiaMapInteractiveProps {
+  stateSummaries?: StateSummaryItem[];
+}
 
 const geoUrl = '/india-states.json';
 
@@ -132,12 +147,74 @@ const STATE_LABELS: StateLabelConfig[] = [
   },
 ];
 
-export function IndiaMapInteractive() {
+export function IndiaMapInteractive({ stateSummaries: propStateSummaries }: IndiaMapInteractiveProps = {}) {
+  const [internalStateSummaries, setInternalStateSummaries] = useState<StateSummaryItem[]>([]);
   const [hoveredState, setHoveredState] = useState<string | null>(null);
   const [tooltipStats, setTooltipStats] = useState<StateStats | null>(null);
   const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number } | null>(null);
 
   const { filters, setFilter } = useAppStore();
+
+  useEffect(() => {
+    if (!propStateSummaries || propStateSummaries.length === 0) {
+      apiClient.getStates().then((res) => {
+        if (res && res.length > 0) {
+          setInternalStateSummaries(
+            res.map((s) => ({
+              stateName: s.stateName,
+              totalProjects: s.totalProjects,
+              highRiskProjects: s.highRiskProjects,
+              criticalRiskProjects: s.criticalRiskProjects,
+              delayedProjects: s.delayedProjects,
+              averageRiskScore: s.averageRiskScore,
+              dominantRiskLevel: s.dominantRiskLevel,
+            }))
+          );
+        }
+      }).catch(() => {
+        // Fallback silently if offline; getStateStats will fall back gracefully
+      });
+    }
+  }, [propStateSummaries]);
+
+  const effectiveSummaries = useMemo(() => {
+    return (propStateSummaries && propStateSummaries.length > 0)
+      ? propStateSummaries
+      : internalStateSummaries;
+  }, [propStateSummaries, internalStateSummaries]);
+
+  const apiStateMap = useMemo(() => {
+    const map = new Map<string, StateSummaryItem>();
+    effectiveSummaries.forEach((s) => {
+      map.set(normalizeStateName(s.stateName).toLowerCase(), s);
+    });
+    return map;
+  }, [effectiveSummaries]);
+
+  const getStateStats = useCallback((rawName: string): StateStats => {
+    const canonical = normalizeStateName(rawName);
+    const apiItem = apiStateMap.get(canonical.toLowerCase());
+    if (apiItem) {
+      const domLevel = (apiItem.dominantRiskLevel || 'LOW').toUpperCase();
+      const riskLevel: StateStats['riskLevel'] = 
+        domLevel === 'CRITICAL' ? 'CRITICAL' :
+        domLevel === 'HIGH' ? 'HIGH' :
+        domLevel === 'MEDIUM' ? 'MEDIUM' : 'LOW';
+
+      return {
+        stateName: apiItem.stateName,
+        totalProjects: apiItem.totalProjects,
+        highRiskProjects: apiItem.highRiskProjects,
+        criticalRiskProjects: apiItem.criticalRiskProjects,
+        costRiskProjects: Math.max(0, apiItem.highRiskProjects - apiItem.criticalRiskProjects),
+        timeRiskProjects: apiItem.delayedProjects,
+        sectorDistribution: [],
+        averageRisk: Math.round(apiItem.averageRiskScore),
+        riskLevel,
+      };
+    }
+    return getStateStatistics(canonical);
+  }, [apiStateMap]);
 
   const handleStateClick = (rawStateName: string) => {
     const canonical = normalizeStateName(rawStateName);
@@ -151,7 +228,7 @@ export function IndiaMapInteractive() {
   const handleMouseEnter = (rawStateName: string, event?: React.MouseEvent) => {
     const canonical = normalizeStateName(rawStateName);
     setHoveredState(canonical);
-    const stats = getStateStatistics(canonical);
+    const stats = getStateStats(canonical);
     setTooltipStats(stats);
     if (event) {
       const bounds = event.currentTarget.closest('svg')?.getBoundingClientRect();
@@ -178,8 +255,8 @@ export function IndiaMapInteractive() {
   }, [hoveredState, filters.state]);
 
   const activeSideStats: StateStats = useMemo(() => {
-    return getStateStatistics(activeSideState);
-  }, [activeSideState]);
+    return getStateStats(activeSideState);
+  }, [activeSideState, getStateStats]);
 
   const isStateSelected = (rawStateName: string) => {
     if (!filters.state || filters.state === 'All') return false;
@@ -287,7 +364,7 @@ export function IndiaMapInteractive() {
                     {geographies.map((geo, i) => {
                       const rawName = (geo.properties?.name || geo.properties?.ST_NM || '') as string;
                       const canonicalName = normalizeStateName(rawName);
-                      const stats = getStateStatistics(canonicalName);
+                      const stats = getStateStats(canonicalName);
                       const hasProjects = stats.totalProjects > 0;
                       const selected = isStateSelected(canonicalName);
                       const hovered = hoveredState === canonicalName;

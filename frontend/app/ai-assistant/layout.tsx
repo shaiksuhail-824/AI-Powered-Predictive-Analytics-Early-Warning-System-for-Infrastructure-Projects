@@ -11,7 +11,7 @@ export default function SharedLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { isAuthenticated } = useAuthStore();
+  const { user, isAuthenticated } = useAuthStore();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
 
@@ -19,12 +19,15 @@ export default function SharedLayout({
     setMounted(true);
     if (!isAuthenticated) {
       router.push('/login');
+    } else if (user?.role === 'AGENCY_CONTRACTOR') {
+      router.push('/forbidden');
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, user, router]);
 
-  if (!mounted || !isAuthenticated) {
+  if (!mounted || !isAuthenticated || user?.role === 'AGENCY_CONTRACTOR') {
     return <div className="min-h-screen flex items-center justify-center bg-background">Loading...</div>;
   }
+
 
   return (
     <div className="min-h-screen flex flex-col bg-background">

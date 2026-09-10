@@ -11,20 +11,25 @@ export default function AgencyLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { user, isAuthenticated } = useAuthStore();
+  const { user, isAuthenticated, isLoading } = useAuthStore();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    if (!isAuthenticated || user?.role !== 'AGENCY_CONTRACTOR') {
-      router.push('/login');
+    if (!isLoading) {
+      if (!isAuthenticated) {
+        router.push('/login');
+      } else if (user?.role !== 'AGENCY_CONTRACTOR' && user?.role !== 'ADMIN') {
+        router.push('/forbidden');
+      }
     }
-  }, [isAuthenticated, user, router]);
+  }, [isAuthenticated, user, isLoading, router]);
 
-  if (!mounted || !isAuthenticated || user?.role !== 'AGENCY_CONTRACTOR') {
+  if (!mounted || isLoading || !isAuthenticated || (user?.role !== 'AGENCY_CONTRACTOR' && user?.role !== 'ADMIN')) {
     return <div className="min-h-screen flex items-center justify-center bg-background">Loading...</div>;
   }
+
 
   return (
     <div className="min-h-screen flex flex-col bg-background">

@@ -1,28 +1,57 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Card, MetricCard } from '../../../../components/ui/Cards';
 import { RiskBadge } from '../../../../components/ui/RiskBadge';
 import { FolderKanban, AlertTriangle, TrendingUp, Clock, ArrowLeft, Search, Filter } from 'lucide-react';
-import { getProjectsByState, getStateStatistics } from '../../../../data/mockData';
+import { getProjectsByState, getStateStatistics, normalizeStateName } from '../../../../data/mockData';
+import { apiClient } from '../../../../services/api';
+import { Project, StateStats } from '../../../../types';
 
 export default function StateViewPage() {
   const params = useParams();
   // Decode URL parameter e.g., 'andhra-pradesh' -> 'Andhra Pradesh'
   const rawStateParam = typeof params.state === 'string' ? params.state : '';
-  const stateName = rawStateParam
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+  const stateName = normalizeStateName(
+    rawStateParam
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ')
+  );
 
   const [searchTerm, setSearchTerm] = useState('');
   const [filterSector, setFilterSector] = useState('All');
   const [filterRisk, setFilterRisk] = useState('All');
 
-  const stats = getStateStatistics(stateName);
-  const allProjects = getProjectsByState(stateName);
+  const [stats, setStats] = useState<StateStats>(() => getStateStatistics(stateName));
+  const [allProjects, setAllProjects] = useState<Project[]>(() => getProjectsByState(stateName));
+
+  useEffect(() => {
+    let isMounted = true;
+    async function fetchStateData() {
+      try {
+        const [stateDetails, projectsRes] = await Promise.allSettled([
+          apiClient.getStateDetails(stateName),
+          apiClient.getProjects({ state: stateName, pageSize: 200 }),
+        ]);
+
+        if (isMounted && stateDetails.status === 'fulfilled' && stateDetails.value) {
+          setStats(stateDetails.value);
+        }
+
+        if (isMounted && projectsRes.status === 'fulfilled' && projectsRes.value.projects.length > 0) {
+          setAllProjects(projectsRes.value.projects);
+        }
+      } catch (err) {
+        console.warn('Live state fetch error, using preloaded data:', err);
+      }
+    }
+
+    fetchStateData();
+    return () => { isMounted = false; };
+  }, [stateName]);
 
   // Derive filter options dynamically
   const sectors = ['All', ...Array.from(new Set(allProjects.map(p => p.sector)))];

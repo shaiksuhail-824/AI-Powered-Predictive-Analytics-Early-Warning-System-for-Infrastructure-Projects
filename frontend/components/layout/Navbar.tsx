@@ -1,18 +1,24 @@
 'use client';
 
+import { useEffect } from 'react';
 import Link from 'next/link';
 import { useAuthStore } from '../../store/authStore';
 import { useRouter } from 'next/navigation';
 import { LogOut, User as UserIcon } from 'lucide-react';
 
 export default function Navbar() {
-  const { user, isAuthenticated, logout } = useAuthStore();
+  const { user, isAuthenticated, logout, loadSession } = useAuthStore();
   const router = useRouter();
+
+  useEffect(() => {
+    loadSession();
+  }, [loadSession]);
 
   const handleLogout = () => {
     logout();
-    router.push('/');
+    router.push('/login');
   };
+
 
   return (
     <nav className="bg-white border-b border-border h-16 flex items-center justify-between px-6 sticky top-0 z-50">

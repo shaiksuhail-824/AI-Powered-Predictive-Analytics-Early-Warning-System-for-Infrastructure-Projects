@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { getProjectByCode, getProjectHistory, getProjectRisk, getProjectAlerts, getBenchmarkData } from '../../../../data/mockData';
@@ -8,17 +8,55 @@ import { Card } from '../../../../components/ui/Cards';
 import { RiskBadge } from '../../../../components/ui/RiskBadge';
 import { ArrowLeft, Building2, MapPin, IndianRupee, Clock, TrendingDown, TrendingUp, CheckCircle2, MessageSquareText, BarChart3, Activity } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { apiClient } from '../../../../services/api';
+import { Project, MonthlyMonitoring, RiskAnalysis, Alert, BenchmarkData } from '../../../../types';
 
 export default function ProjectDetailsPage() {
   const params = useParams();
   const projectId = typeof params.id === 'string' ? params.id : '';
-  const project = getProjectByCode(projectId);
-  const history = getProjectHistory(projectId);
-  const riskAnalysis = getProjectRisk(projectId);
-  const alerts = getProjectAlerts(projectId);
-  const benchmark = getBenchmarkData(projectId);
-  
+
+  const [project, setProject] = useState<Project | null>(() => getProjectByCode(projectId) || null);
+  const [history, setHistory] = useState<MonthlyMonitoring[]>(() => getProjectHistory(projectId));
+  const [riskAnalysis, setRiskAnalysis] = useState<RiskAnalysis | null>(() => getProjectRisk(projectId) || null);
+  const [alerts] = useState<Alert[]>(() => getProjectAlerts(projectId));
+  const [benchmark, setBenchmark] = useState<BenchmarkData>(() => getBenchmarkData(projectId));
+
   const [activeTab, setActiveTab] = useState<'overview' | 'history' | 'alerts' | 'benchmark'>('overview');
+
+  useEffect(() => {
+    let isMounted = true;
+    async function fetchProjectData() {
+      if (!projectId) return;
+      try {
+        const [projRes, histRes, riskRes, benchRes] = await Promise.allSettled([
+          apiClient.getProjectDetail(projectId),
+          apiClient.getProjectHistory(projectId),
+          apiClient.getProjectRisk(projectId),
+          apiClient.getBenchmarking(projectId),
+        ]);
+
+        if (isMounted) {
+          if (projRes.status === 'fulfilled' && projRes.value) {
+            setProject(projRes.value);
+          }
+          if (histRes.status === 'fulfilled' && histRes.value.length > 0) {
+            setHistory(histRes.value);
+          }
+          if (riskRes.status === 'fulfilled' && riskRes.value) {
+            setRiskAnalysis(riskRes.value);
+          }
+          if (benchRes.status === 'fulfilled' && benchRes.value) {
+            setBenchmark(benchRes.value);
+          }
+        }
+      } catch (err) {
+        console.warn('Live project fetch error, using preloaded data:', err);
+      }
+    }
+
+    fetchProjectData();
+    return () => { isMounted = false; };
+  }, [projectId]);
 
   if (!project || !riskAnalysis) {
     return (
