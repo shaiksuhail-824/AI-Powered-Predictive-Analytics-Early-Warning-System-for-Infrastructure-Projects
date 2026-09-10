@@ -1,0 +1,75 @@
+artifact_path: file:C:/Users/varsh/OneDrive/Documents/AI-Powered-Predictive-Analytics-Early-Warning-System-for-Infrastructure-Projects/mlruns/0/models/m-30b01a0db29449b2978e206d188c5e17/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.13.5
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.9.0
+    skops_trusted_types: null
+is_signature_from_type_hint: false
+mlflow_version: 3.16.0
+model_id: m-30b01a0db29449b2978e206d188c5e17
+model_size_bytes: 1441937
+model_uuid: m-30b01a0db29449b2978e206d188c5e17
+prompts: null
+run_id: 1b2605eaa05a454eb5c0ec8ad6dd0c73
+saved_input_example_info:
+  artifact_path: input_example.json
+  pandas_orient: split
+  serving_input_path: serving_input_example.json
+  type: dataframe
+signature:
+  inputs: '[{"type": "double", "name": "agency_frequency", "required": true}, {"type":
+    "long", "name": "agency_frequency_missing", "required": true}, {"type": "double",
+    "name": "approval_to_start_days", "required": true}, {"type": "long", "name":
+    "approval_to_start_days_missing", "required": true}, {"type": "double", "name":
+    "cost_variance_cr", "required": true}, {"type": "double", "name": "cost_variance_pct",
+    "required": true}, {"type": "double", "name": "cumulative_expenditure_cr", "required":
+    true}, {"type": "long", "name": "cumulative_expenditure_cr_missing", "required":
+    true}, {"type": "double", "name": "elapsed_duration_days", "required": true},
+    {"type": "long", "name": "elapsed_duration_days_missing", "required": true}, {"type":
+    "double", "name": "elapsed_duration_pct", "required": true}, {"type": "long",
+    "name": "elapsed_duration_pct_missing", "required": true}, {"type": "double",
+    "name": "expenditure_burn_rate", "required": true}, {"type": "double", "name":
+    "expenditure_delta_recent", "required": true}, {"type": "double", "name": "expenditure_per_progress_pct_cr",
+    "required": true}, {"type": "long", "name": "expenditure_per_progress_pct_cr_missing",
+    "required": true}, {"type": "double", "name": "expenditure_to_cost_ratio", "required":
+    true}, {"type": "double", "name": "expenditure_to_original_cost_pct", "required":
+    true}, {"type": "long", "name": "expenditure_to_original_cost_pct_missing", "required":
+    true}, {"type": "long", "name": "financial_year", "required": true}, {"type":
+    "double", "name": "monthly_expenditure", "required": true}, {"type": "double",
+    "name": "months_since_start", "required": true}, {"type": "double", "name": "original_cost_cr",
+    "required": true}, {"type": "long", "name": "original_cost_cr_missing", "required":
+    true}, {"type": "double", "name": "physical_progress_pct", "required": true},
+    {"type": "long", "name": "physical_progress_pct_missing", "required": true}, {"type":
+    "double", "name": "planned_duration_days", "required": true}, {"type": "long",
+    "name": "planned_duration_days_missing", "required": true}, {"type": "double",
+    "name": "progress_delta_recent", "required": true}, {"type": "double", "name":
+    "progress_per_elapsed_month", "required": true}, {"type": "long", "name": "progress_per_elapsed_month_missing",
+    "required": true}, {"type": "long", "name": "progress_stagnation", "required":
+    true}, {"type": "double", "name": "progress_velocity", "required": true}, {"type":
+    "double", "name": "project_age_months", "required": true}, {"type": "double",
+    "name": "recent_spend_efficiency_cr_pct", "required": true}, {"type": "double",
+    "name": "remaining_original_cost_cr", "required": true}, {"type": "long", "name":
+    "remaining_original_cost_cr_missing", "required": true}, {"type": "double", "name":
+    "remaining_planned_days", "required": true}, {"type": "long", "name": "remaining_planned_days_missing",
+    "required": true}, {"type": "long", "name": "report_month_num_missing", "required":
+    true}, {"type": "long", "name": "report_year_missing", "required": true}, {"type":
+    "double", "name": "schedule_progress_gap_pct", "required": true}, {"type": "long",
+    "name": "schedule_progress_gap_pct_missing", "required": true}, {"type": "double",
+    "name": "state_frequency", "required": true}, {"type": "long", "name": "state_frequency_missing",
+    "required": true}, {"type": "double", "name": "time_overrun_days", "required":
+    true}, {"type": "long", "name": "time_overrun_flag", "required": true}, {"type":
+    "double", "name": "time_overrun_months", "required": true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "int64", "shape": [-1]}}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2026-09-10 09:21:23.624329'

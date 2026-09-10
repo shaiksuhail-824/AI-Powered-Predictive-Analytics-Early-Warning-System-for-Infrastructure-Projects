@@ -122,7 +122,7 @@ The production models have been serialized and cataloged into the MLflow Model R
 | Model Name | Registry Version | Stage | Pipeline File |
 | :--- | :---: | :---: | :--- |
 | `Schedule_Delay_Predictor` | 5 | Production | `models/schedule_delay/production_model.pkl` |
-| `Cost_Overrun_Predictor` | 5 | Production | `models/cost_overrun/production_model.pkl` |
+| `Cost_Overrun_Predictor` | 6 | Production | `models/cost_overrun/production_model.pkl` |
 | `Project_Anomaly_Sentinel` | 4 | Production | `models/anomaly_detector/production_anomaly_detector.pkl` |
 
 Metadata, feature columns, metrics, and parameters are cataloged in `reports/mlops_registry_catalog.json` and `models/selected_models_summary.json`.
