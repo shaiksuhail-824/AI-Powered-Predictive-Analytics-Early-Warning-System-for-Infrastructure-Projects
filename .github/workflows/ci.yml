@@ -152,11 +152,31 @@ jobs:
 
       - name: Verify frontend HTTP response
         run: |
-          echo "Testing frontend response on port 3000..."
-          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000)
-          echo "Frontend returned HTTP Status: $HTTP_STATUS"
-          if [ "$HTTP_STATUS" -ne 200 ] && [ "$HTTP_STATUS" -ne 307 ] && [ "$HTTP_STATUS" -ne 308 ]; then
-            echo "ERROR: Unexpected HTTP status code from frontend: $HTTP_STATUS"
+          echo "Polling frontend response on port 3000 (http://localhost:3000)..."
+          TIMEOUT=60
+          ELAPSED=0
+          READY=false
+
+          while [ $ELAPSED -lt $TIMEOUT ]; do
+            HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000 || true)
+            if [ "$HTTP_STATUS" = "200" ] || [ "$HTTP_STATUS" = "307" ] || [ "$HTTP_STATUS" = "308" ]; then
+              echo "Frontend returned HTTP status $HTTP_STATUS after ${ELAPSED}s."
+              READY=true
+              break
+            fi
+            sleep 3
+            ELAPSED=$((ELAPSED + 3))
+            echo "Waiting for frontend service... (${ELAPSED}s / ${TIMEOUT}s, current status: ${HTTP_STATUS})"
+          done
+
+          if [ "$READY" != "true" ]; then
+            echo "ERROR: Frontend failed to become ready within ${TIMEOUT} seconds."
+            echo "=== Container Process Status ==="
+            docker compose ps
+            echo "=== Frontend Container Logs (Last 100 lines) ==="
+            docker compose logs frontend --tail=100 || true
+            echo "=== Frontend Health Inspection ==="
+            docker inspect --format='{{json .State.Health}}' paimana-frontend || true
             exit 1
           fi
 
