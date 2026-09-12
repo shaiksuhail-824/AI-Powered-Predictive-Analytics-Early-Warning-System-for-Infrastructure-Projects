@@ -1,0 +1,30 @@
+{
+  "schedule_delay": {
+    "selected_model": "schedule_delay_cuf_logistic_regression",
+    "feature_type": "cuf",
+    "model_type": "logistic_regression",
+    "features_count": 10,
+    "val_f1": 0.9969889595182336,
+    "val_recall": 0.9953239812959253,
+    "val_roc_auc": 0.9934362467825296,
+    "test_f1": 0.9836875926841324,
+    "test_recall": 0.969785575048733,
+    "test_roc_auc": 0.984480663249344,
+    "selection_rationale": "Maximized composite validation F1 and Recall on high-risk delayed projects",
+    "production_path": "models\\schedule_delay\\production_model.pkl"
+  },
+  "cost_overrun": {
+    "selected_model": "cost_overrun_enhanced_random_forest",
+    "feature_type": "enhanced",
+    "model_type": "random_forest",
+    "features_count": 48,
+    "val_f1": 0.9772727272727272,
+    "val_pr_auc": 0.9940558053249446,
+    "val_roc_auc": 0.9979539879068532,
+    "test_f1": 0.9605734767025088,
+    "test_pr_auc": 0.9682939272175436,
+    "test_roc_auc": 0.9852109551720258,
+    "selection_rationale": "Maximized PR-AUC and F1 for imbalanced cost overrun classification",
+    "production_path": "models\\cost_overrun\\production_model.pkl"
+  }
+}
