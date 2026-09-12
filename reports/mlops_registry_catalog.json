@@ -1,0 +1,46 @@
+[
+  {
+    "registered_model_name": "Schedule_Delay_Predictor",
+    "version": 5,
+    "run_id": "56da45fe917b45288ff803b69decc306",
+    "stage": "PRODUCTION",
+    "data_status": "SYNTHETIC / DEMONSTRATION",
+    "algorithm": "logistic_regression",
+    "features_count": 10,
+    "test_metrics": {
+      "precision": 0.9979939819458375,
+      "recall": 0.969785575048733,
+      "f1": 0.9836875926841325,
+      "roc_auc": 0.984480663249344,
+      "pr_auc": 0.9966899061158951,
+      "brier_score": 0.025139156374484432
+    }
+  },
+  {
+    "registered_model_name": "Cost_Overrun_Predictor",
+    "version": 6,
+    "run_id": "1b2605eaa05a454eb5c0ec8ad6dd0c73",
+    "stage": "PRODUCTION",
+    "data_status": "SYNTHETIC / DEMONSTRATION",
+    "algorithm": "random_forest",
+    "features_count": 48,
+    "test_metrics": {
+      "precision": 0.9781021897810219,
+      "recall": 0.9436619718309859,
+      "f1": 0.9605734767025089,
+      "roc_auc": 0.9852109551720258,
+      "pr_auc": 0.9682939272175435,
+      "brier_score": 0.009968810693153977
+    }
+  },
+  {
+    "registered_model_name": "Project_Anomaly_Sentinel",
+    "version": 4,
+    "run_id": "4a301787b2c64e1a9056af8304775c98",
+    "stage": "PRODUCTION",
+    "data_status": "SYNTHETIC / DEMONSTRATION",
+    "algorithm": "IsolationForest",
+    "features_count": 10,
+    "test_metrics": {}
+  }
+]

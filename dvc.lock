@@ -1,0 +1,239 @@
+schema: '2.0'
+stages:
+  ingest:
+    cmd: python src/data/ingest.py
+    deps:
+    - path: src/data/ingest.py
+      hash: md5
+      md5: 45edf671e22997e61a10a9bc1f656d4e
+      size: 4471
+    outs:
+    - path: data/raw/paimana_time_overrun.csv
+      hash: md5
+      md5: c7c9afa3e2be45af772319deba7c70f0
+      size: 4610918
+    - path: reports/source_metadata.md
+      hash: md5
+      md5: eac5299b58dd8c49e26df5697c9cb18c
+      size: 2063
+  validate:
+    cmd: python src/data/validate.py
+    deps:
+    - path: data/raw/paimana_time_overrun.csv
+      hash: md5
+      md5: c7c9afa3e2be45af772319deba7c70f0
+      size: 4610918
+    - path: src/data/validate.py
+      hash: md5
+      md5: fdc6ef6303cca2b3e010582b48bd792d
+      size: 9505
+    outs:
+    - path: data/interim/paimana_time_overrun_validated.csv
+      hash: md5
+      md5: 173ecf9e7cb3c26bbe148255dcb66075
+      size: 4519159
+    - path: reports/data_quality.md
+      hash: md5
+      md5: 05f386e8c97355b129712dd9f7759c63
+      size: 5490
+  eda:
+    cmd: python src/data/eda.py
+    deps:
+    - path: data/interim/paimana_time_overrun_validated.csv
+      hash: md5
+      md5: 173ecf9e7cb3c26bbe148255dcb66075
+      size: 4519159
+    - path: src/data/eda.py
+      hash: md5
+      md5: caf5f6f287d0c6c9da540de992593014
+      size: 13431
+    outs:
+    - path: reports/eda_report.md
+      hash: md5
+      md5: 305f2246a3234548d539b50675ebb7ea
+      size: 4181
+    - path: reports/figures
+      hash: md5
+      md5: 7ddd3ad8a1e6363a33b30761c24f4f5e.dir
+      size: 1799393
+      nfiles: 5
+  preprocess:
+    cmd: python src/data/preprocess.py
+    deps:
+    - path: data/interim/paimana_time_overrun_validated.csv
+      hash: md5
+      md5: 173ecf9e7cb3c26bbe148255dcb66075
+      size: 4519159
+    - path: src/data/preprocess.py
+      hash: md5
+      md5: ccf0374b96f8fba8e8da712b5e34acb4
+      size: 3787
+    params:
+      params.yaml:
+        preprocessing.drop_duplicates: true
+        preprocessing.expenditure_ratio_max_clip: 500.0
+        preprocessing.missing_threshold: 0.5
+        preprocessing.progress_max_clip: 100.0
+        preprocessing.progress_min_clip: 0.0
+    outs:
+    - path: data/processed/paimana_time_overrun_processed.csv
+      hash: md5
+      md5: 9e3d067733becd0cb34512ac77ab4667
+      size: 4702662
+  feature_engineering:
+    cmd: python src/data/feature_engineering.py
+    deps:
+    - path: data/processed/paimana_time_overrun_processed.csv
+      hash: md5
+      md5: 9e3d067733becd0cb34512ac77ab4667
+      size: 4702662
+    - path: src/data/feature_engineering.py
+      hash: md5
+      md5: b9bd61168b11e0afc787ce92ab003b7a
+      size: 19236
+    params:
+      params.yaml:
+        feature_engineering.lag_lead_cutoff_only: true
+        feature_engineering.scale_features: false
+        targets.delay_threshold_months: 1.0
+    outs:
+    - path: data/features/paimana_cuf_baseline.csv
+      hash: md5
+      md5: 57539d7c78ac8f953e42b2fbd7a73916
+      size: 1876994
+    - path: data/features/paimana_ml_ready_time_overrun.csv
+      hash: md5
+      md5: 0037f8fc98c52e9f9f658c0ef6a58a8d
+      size: 5101533
+    - path: reports/cuf_feature_mapping.md
+      hash: md5
+      md5: 8519f5cc1a92eaef7b1ac321d7ea25ab
+      size: 3449
+    - path: reports/data_leakage_audit.md
+      hash: md5
+      md5: 757fc4679918caa93d86d49b7f7c536c
+      size: 4286
+    - path: reports/feature_dictionary.md
+      hash: md5
+      md5: d7bc6552339856a24faf455a37d52421
+      size: 4408
+  train:
+    cmd: python -m src.ml.train
+    deps:
+    - path: configs/model_params.yaml
+      hash: md5
+      md5: 693c42947dfa8d5e6a73eece9b338c06
+      size: 2542
+    - path: data/features/paimana_ml_ready_time_overrun.csv
+      hash: md5
+      md5: 0037f8fc98c52e9f9f658c0ef6a58a8d
+      size: 5101533
+    - path: src/ml/feature_pipeline.py
+      hash: md5
+      md5: 6ebd32770d4d953c6e009aa698e3f4fa
+      size: 7271
+    - path: src/ml/train.py
+      hash: md5
+      md5: 6cb09d0371a74dd47424fa0e0a5a8614
+      size: 11859
+    outs:
+    - path: reports/training_run_summary.csv
+      hash: md5
+      md5: 0195f46bb73a760c2417227c52bcb7a3
+      size: 3680
+  model_selection:
+    cmd: python -m src.ml.model_selection
+    deps:
+    - path: reports/training_run_summary.csv
+      hash: md5
+      md5: 0195f46bb73a760c2417227c52bcb7a3
+      size: 3680
+    - path: src/ml/model_selection.py
+      hash: md5
+      md5: 7bdab24adeea1675dd2a7ada3a1ce667
+      size: 5095
+    outs:
+    - path: models/cost_overrun/production_model.pkl
+      hash: md5
+      md5: 6fa81fe17c771018f013666f342d4716
+      size: 1433756
+    - path: models/schedule_delay/production_model.pkl
+      hash: md5
+      md5: 1863c6422569195c81cc1711f5f8d24f
+      size: 2785
+    - path: models/selected_models_summary.json
+      hash: md5
+      md5: f3e4dffcac78ec6e80e0d7a95fd7db3e
+      size: 1183
+  anomaly_sentinel:
+    cmd: python -m src.ml.anomaly_detection
+    deps:
+    - path: configs/model_params.yaml
+      hash: md5
+      md5: 693c42947dfa8d5e6a73eece9b338c06
+      size: 2542
+    - path: data/features/paimana_ml_ready_time_overrun.csv
+      hash: md5
+      md5: 0037f8fc98c52e9f9f658c0ef6a58a8d
+      size: 5101533
+    - path: src/ml/anomaly_detection.py
+      hash: md5
+      md5: d36aca4399a498068308209165aae1ce
+      size: 5881
+    outs:
+    - path: models/anomaly_detector/production_anomaly_detector.pkl
+      hash: md5
+      md5: 584daf7fe205371bd8f0425bbe8b1c43
+      size: 993915
+  evaluate:
+    cmd: python -m src.ml.evaluate
+    deps:
+    - path: models/cost_overrun/production_model.pkl
+      hash: md5
+      md5: 6fa81fe17c771018f013666f342d4716
+      size: 1433756
+    - path: models/schedule_delay/production_model.pkl
+      hash: md5
+      md5: 1863c6422569195c81cc1711f5f8d24f
+      size: 2785
+    - path: reports/training_run_summary.csv
+      hash: md5
+      md5: 0195f46bb73a760c2417227c52bcb7a3
+      size: 3680
+    - path: src/ml/evaluate.py
+      hash: md5
+      md5: 4c0949ebf21182c88696780062630661
+      size: 7729
+    outs:
+    - path: reports/cuf_vs_enhanced_comparison.csv
+      hash: md5
+      md5: ef99ded1d82bb83bf2c523819213a8ac
+      size: 1291
+    - path: reports/overfitting_underfitting_summary.csv
+      hash: md5
+      md5: 1962ae75dcb193becdc49af1df32090f
+      size: 4158
+  register:
+    cmd: python -m src.mlops.register_model
+    deps:
+    - path: models/anomaly_detector/production_anomaly_detector.pkl
+      hash: md5
+      md5: 584daf7fe205371bd8f0425bbe8b1c43
+      size: 993915
+    - path: models/cost_overrun/production_model.pkl
+      hash: md5
+      md5: 6fa81fe17c771018f013666f342d4716
+      size: 1433756
+    - path: models/schedule_delay/production_model.pkl
+      hash: md5
+      md5: 1863c6422569195c81cc1711f5f8d24f
+      size: 2785
+    - path: src/mlops/register_model.py
+      hash: md5
+      md5: 33555088a17ae68a5e2f9252dd124a36
+      size: 5886
+    outs:
+    - path: reports/mlops_registry_catalog.json
+      hash: md5
+      md5: 2f6ba8d1caa67fbc046205f07dcf7e20
+      size: 1381

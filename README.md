@@ -399,7 +399,45 @@ Every component must have a clear purpose in solving the infrastructure-monitori
 
 ---
 
-# 15. Documentation
+# 15. Documentation & Reports
 
 - [Data Team Guide](docs/DATA_TEAM_README.md)
 - [DVC Data Pipeline](docs/DATA_PIPELINE.md)
+- [Data Dictionary](reports/data_dictionary.md)
+- [Data Quality Audit](reports/data_quality.md)
+- [EDA Report](reports/eda_report.md)
+- [Feature Dictionary](reports/feature_dictionary.md)
+- [CUF Feature Mapping Matrix](reports/cuf_feature_mapping.md)
+- [Data Leakage Audit](reports/data_leakage_audit.md)
+- [Repository Baseline Audit](reports/repository_audit.md)
+- [Source Ingestion Metadata](reports/source_metadata.md)
+
+---
+
+# 16. Quickstart: Reproducing the Data Foundation
+
+### 1. Setup Environment
+```bash
+# Using uv (recommended)
+uv sync
+
+# Or using standard pip
+pip install -r requirements.txt
+```
+
+### 2. Run Entire Data Pipeline with DVC
+```bash
+dvc repro
+```
+
+### 3. Run Automated Quality & Regression Tests
+```bash
+pytest tests/data/ -v
+```
+
+### 4. Interactive Analytical Notebooks
+Launch Jupyter to explore:
+- `notebooks/01_data_understanding.ipynb`
+- `notebooks/02_data_quality.ipynb`
+- `notebooks/03_eda.ipynb`
+- `notebooks/04_feature_analysis.ipynb`

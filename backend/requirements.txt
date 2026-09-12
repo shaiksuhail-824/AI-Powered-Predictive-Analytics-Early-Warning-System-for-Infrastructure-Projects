@@ -1,0 +1,16 @@
+# Production dependencies for FastAPI Backend Container
+# MoSPI PAIMANA Early-Warning & Predictive Analytics System (SIH26103)
+fastapi==0.141.1
+uvicorn==0.52.4
+pydantic==2.13.5
+pydantic-settings==2.15.0
+pandas==3.0.5
+numpy==2.5.3
+scipy==1.18.1
+scikit-learn==1.9.0
+xgboost==3.4.1
+shap==0.52.0
+joblib==1.6.0
+pyyaml==6.0.3
+httpx==0.28.1
+matplotlib>=3.5.0

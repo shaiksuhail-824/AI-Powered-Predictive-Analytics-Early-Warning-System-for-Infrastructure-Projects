@@ -1,0 +1,91 @@
+# SIH26103 ML + MLOps Production Pipeline Configuration
+# Ministry of Statistics and Programme Implementation (MoSPI)
+# PAIMANA Time Overrun & Cost Overrun Early-Warning System
+
+metadata:
+  data_status: "SYNTHETIC / DEMONSTRATION"
+  problem_statement: "SIH26103"
+  project_name: "PAIMANA-Infrastructure-AI"
+  version: "1.0.0"
+
+paths:
+  ml_ready_features: "data/features/paimana_ml_ready_time_overrun.csv"
+  cuf_baseline_features: "data/features/paimana_cuf_baseline.csv"
+  models_dir: "models"
+  reports_dir: "reports"
+  figures_dir: "reports/figures_ml"
+  mlflow_tracking_uri: "sqlite:///mlflow.db"
+
+targets:
+  schedule_delay:
+    name: "future_schedule_delay"
+    threshold_months: 1.0
+    description: "Binary flag: 1 if project experiences schedule delay >= 1 month in next observation, 0 otherwise"
+  cost_overrun:
+    name: "future_cost_overrun"
+    threshold_pct: 100.0
+    description: "Binary flag: 1 if project cumulative expenditure exceeds original sanctioned cost in next observation, 0 otherwise"
+
+temporal_split:
+  train_end: "2025-11-01"      # Historical Training: 2025-04 through 2025-11
+  val_end: "2026-01-01"        # Historical Validation: 2025-12 through 2026-01
+  test_end: "2026-03-01"       # Historical Holdout Test: 2026-02 through 2026-03
+  current_start: "2026-04-01"  # Current Unseen Inference: 2026-04 through 2026-07
+
+models:
+  random_seed: 42
+  logistic_regression:
+    max_iter: 1000
+    C: 1.0
+    class_weight: "balanced"
+    solver: "lbfgs"
+  random_forest:
+    n_estimators: 150
+    max_depth: 8
+    min_samples_split: 5
+    min_samples_leaf: 2
+    class_weight: "balanced"
+  xgboost:
+    n_estimators: 150
+    max_depth: 5
+    learning_rate: 0.05
+    subsample: 0.8
+    colsample_bytree: 0.8
+    eval_metric: "logloss"
+
+anomaly_sentinel:
+  algorithm: "IsolationForest"
+  n_estimators: 150
+  contamination: 0.05
+  random_state: 42
+  thresholds:
+    normal_min_score: 0.05
+    unusual_min_score: 0.00
+    anomalous_min_score: -0.05
+
+risk_scoring:
+  weights:
+    schedule_delay_prob: 0.40
+    cost_overrun_prob: 0.35
+    schedule_progress_gap: 0.15
+    anomaly_penalty: 0.10
+  tiers:
+    low: [0, 24.99]
+    medium: [25.0, 49.99]
+    high: [50.0, 74.99]
+    critical: [75.0, 100.0]
+  trajectory:
+    rapid_escalation_delta: 10.0
+    moderate_rise_delta: 5.0
+    de_escalating_delta: -5.0
+
+intervention_priority:
+  weights:
+    risk_score: 0.50
+    cost_impact: 0.30
+    urgency: 0.20
+  tiers:
+    low: [0, 29.99]
+    medium: [30.0, 54.99]
+    high: [55.0, 74.99]
+    critical_intervention: [75.0, 100.0]

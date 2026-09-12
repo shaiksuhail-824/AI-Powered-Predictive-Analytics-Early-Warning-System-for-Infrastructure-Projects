@@ -1,0 +1,7 @@
+[core]
+    remote = local_storage
+['remote "local_storage"']
+    url = C:\Users\varsh\OneDrive\Documents\AI-Powered-Predictive-Analytics-Early-Warning-System-for-Infrastructure-Projects\data\dvc_remote_storage
+['remote "seaweedfs_remote"']
+    url = s3://paimana-dvc-bucket/data
+    endpointurl = http://localhost:8333
