@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAuthStore } from '../../store/authStore';
 import { useRouter } from 'next/navigation';
@@ -9,8 +9,10 @@ import { LogOut, User as UserIcon } from 'lucide-react';
 export default function Navbar() {
   const { user, isAuthenticated, logout, loadSession } = useAuthStore();
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     loadSession();
   }, [loadSession]);
 
@@ -78,7 +80,7 @@ export default function Navbar() {
       </div>
 
       <div className="flex items-center gap-4">
-        {!isAuthenticated ? (
+        {!mounted || !isAuthenticated ? (
           <Link href="/login" className="bg-mospi-500 hover:bg-mospi-600 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors">
             Login
           </Link>

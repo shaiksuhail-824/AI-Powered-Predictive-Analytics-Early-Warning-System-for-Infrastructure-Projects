@@ -22,7 +22,11 @@ export default function ProjectsPage() {
   useEffect(() => {
     setMounted(true);
     if (!isAuthenticated) {
-      router.push('/login');
+      if (typeof window !== 'undefined') {
+        window.location.replace('/login');
+      } else {
+        router.push('/login');
+      }
     }
   }, [isAuthenticated, router]);
 

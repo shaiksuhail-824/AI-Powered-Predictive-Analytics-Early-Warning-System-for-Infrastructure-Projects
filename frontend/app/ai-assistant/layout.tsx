@@ -18,7 +18,11 @@ export default function SharedLayout({
   useEffect(() => {
     setMounted(true);
     if (!isAuthenticated) {
-      router.push('/login');
+      if (typeof window !== 'undefined') {
+        window.location.replace('/login');
+      } else {
+        router.push('/login');
+      }
     } else if (user?.role === 'AGENCY_CONTRACTOR') {
       router.push('/forbidden');
     }

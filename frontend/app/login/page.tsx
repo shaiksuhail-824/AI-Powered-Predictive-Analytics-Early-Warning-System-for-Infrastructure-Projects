@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '../../store/authStore';
 import Navbar from '../../components/layout/Navbar';
@@ -14,7 +14,21 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
-  const { login } = useAuthStore();
+  const { login, isAuthenticated, user } = useAuthStore();
+
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      if (user.role === 'ADMIN') {
+        router.push('/admin/dashboard');
+      } else if (user.role === 'MINISTRY_PROJECT_HEAD') {
+        router.push('/ministry/dashboard');
+      } else if (user.role === 'AGENCY_CONTRACTOR') {
+        router.push('/agency/dashboard');
+      } else {
+        router.push('/');
+      }
+    }
+  }, [isAuthenticated, user, router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
