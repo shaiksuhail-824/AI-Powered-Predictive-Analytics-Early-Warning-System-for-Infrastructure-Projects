@@ -1,443 +1,211 @@
-# SIH26103 — AI-Powered Infrastructure Project Monitoring
+# MoSPI PAIMANA: AI-Powered Infrastructure Project Monitoring & Early-Warning Platform
 
-## Problem Statement
-
-**SIH26103 — Use case on web-based integrated project-monitoring platform**
-
-### Organization
-
-Ministry of Statistics and Programme Implementation (MoSPI)
-
-### Department
-
-Data Informatics & Innovation
-
-### Broader Theme
-
-AI for Infrastructure Monitoring
+**Smart India Hackathon 2026**  
+**Problem Statement ID:** SIH26103  
+**Problem Statement Title:** Use case on web-based integrated project-monitoring platform  
+**Target Ministry:** Ministry of Statistics and Programme Implementation (MoSPI), Government of India  
+**Platform Nomenclature:** MoSPI PAIMANA (*Predictive Analytics and Integrated Monitoring for Automated National Alerts*) / Nirman-Drishti  
 
 ---
 
-# 1. Project Objective
+## Executive Summary
 
-The objective of this project is to develop an AI-powered predictive analytics and early-warning system for infrastructure project monitoring.
+Under the administrative mandate of MoSPI's Infrastructure and Project Monitoring Division (IPMD), central sector mega-infrastructure projects costing ₹150 Crore and above are monitored across India. While conventional monthly flash reporting records milestones retrospectively, historical records reveal that **over 72% of projects experience schedule delays**, often averaging more than 30 months before completion.
 
-The system will use historical and continuously updated project-monitoring information from PAIMANA/OCMS to identify projects that may be at risk of:
+**MoSPI PAIMANA** transforms infrastructure governance from **descriptive and reactive reporting** to **predictive and proactive intervention**. By processing longitudinal monitoring records across 3,531 central infrastructure projects, PAIMANA applies anti-leakage temporal feature engineering and calibrated machine learning models to detect schedule slippage and cost overrun risks **3 to 6 months before formal deadline expiration**.
 
-- Cost escalation
-- Schedule/time overruns
-- Milestone delays
-- Implementation risks
-
-The solution aims to transform infrastructure monitoring from:
-
-**Descriptive Monitoring → Predictive Monitoring → Prescriptive Decision Support**
+The platform is delivered as a containerized, full-stack enterprise application featuring a **Next.js 14 frontend** with interactive SVG/TopoJSON choropleth maps, a **FastAPI backend** (Python 3.12) with Role-Based Access Control, a 10-stage **DVC data pipeline**, **MLflow experiment tracking**, and automated **GitHub Actions CI/CD validation**.
 
 ---
 
-# 2. Planned System
+## Key Features
 
-The complete solution will eventually contain:
-
-1. Data Engineering Pipeline
-2. Exploratory Data Analysis
-3. Data Validation
-4. Data Preprocessing
-5. Feature Engineering
-6. Cost Overrun Prediction
-7. Time Overrun Prediction
-8. Project Risk Scoring
-9. Early Warning System
-10. Explainable AI
-11. Benchmarking and Comparative Analytics
-12. AI-powered Dashboard
-13. LLM-based Project Intelligence Assistant
-14. MLOps Pipeline
-15. API Layer
-16. Cloud Deployment
-17. Monitoring and Observability
+1. **Dual-Target Predictive Analytics:**
+   * **Schedule Delay Classification:** Predicts probability of timeline slippage past sanctioned commissioning dates (**Test F1: 0.9837**, **ROC-AUC: 0.9845**).
+   * **Cost Overrun Classification:** Predicts probability of budget escalation over initial sanctions (**Test F1: 0.9606**, **PR-AUC: 0.9683**).
+2. **Project Anomaly Sentinel:** Unsupervised `IsolationForest` model identifying irregular reporting dynamics without biased fraud labeling.
+3. **Transparent Explainable AI (SHAP):** Real-time TreeSHAP / LinearSHAP attributions isolating the exact drivers (e.g. Schedule-Progress Gap, Capital Burn Velocity) for every individual project.
+4. **Interactive National Executive Dashboard:** TopoJSON SVG India choropleth map with state-level drilldowns, sector distribution charts, and automated early-warning alerts.
+5. **Scenario Simulation & What-If Planning:** Allows project directors and PMC engineers to simulate physical progress and expenditure adjustments to forecast risk score changes in real time.
+6. **Multi-Tier Role-Based Access Control (RBAC):** Scoped access for National Administrators (`ADMIN`), Ministry Heads (`MINISTRY_PROJECT_HEAD`), and CPSE Contractors (`AGENCY_CONTRACTOR`).
 
 ---
 
-# 3. Current Development Phase
+## High-Level System Architecture
 
-> **IMPORTANT**: The current development phase focuses ONLY on the data foundation.
+```mermaid
+flowchart TD
+    subgraph ClientLayer ["Frontend Client Layer (Next.js 14 / React 18)"]
+        UI["National Dashboard / State Views / Scenario Simulator<br/>(Tailwind CSS, Recharts, TopoJSON SVG Map)"]
+    end
 
-### Current scope
+    subgraph BackendLayer ["Backend Service Layer (FastAPI / Python 3.12)"]
+        API["REST API Gateway (/api/v1)"]
+        Auth["JWT Auth & 3-Tier RBAC"]
+        Repo["In-Memory Project Repository (3,531 Projects)"]
+        MLService["Prediction & SHAP Explainability Engine"]
+    end
 
-```text
-Source Data
-    ↓
-Raw Dataset
-    ↓
-Data Validation
-    ↓
-EDA
-    ↓
-Preprocessing
-    ↓
-Feature Engineering
-    ↓
-ML-ready Dataset
-```
+    subgraph MLOpsLayer ["MLOps & Reproducibility"]
+        DVC["10-Stage DVC Pipeline (dvc.yaml / dvc.lock)"]
+        MLflow["MLflow Model Registry (3 Production Models)"]
+        DataStore["Authoritative Datasets (17,697 Records)"]
+    end
 
-Machine learning, FastAPI, AWS deployment, LLM/RAG, and frontend integration will be implemented in later phases.
-
----
-
-# 4. Planned Architecture & MLOps Strategy
-
-The project architecture and MLOps strategy combine Git for code versioning, DVC for dataset and data-pipeline versioning, and MLflow for experiment tracking and model registry.
-
-### Technology Stack
-
-- **Git** — source-code version control
-- **DVC** — dataset and data-pipeline versioning
-- **MLflow** — experiment tracking and ML artifact management
-- **Python** — data and ML implementation
-- **Pandas / NumPy** — data processing
-- **Matplotlib / Seaborn** — visualization
-- **Scikit-learn** — baseline/statistical/ML models
-- **Docker** — later-stage packaging
-- **FastAPI** — later-stage inference API
-- **AWS** — later-stage deployment and infrastructure
-
-### DVC Strategy
-
-DVC is used to track raw, interim, processed, and feature datasets without bloating the Git repository. Pipeline stages (`ingest`, `validate`, `eda`, `preprocess`, `feature_engineering`) are managed reproducibly via `dvc.yaml` and `params.yaml`, with execution locks tracked in `dvc.lock`.
-
-### MLflow Strategy
-
-MLflow is reserved for the future ML phase to track experiments, model parameters, evaluation metrics, and artifacts, providing a clean separation between data versioning (DVC) and model management (MLflow).
-
----
-
-# 5. Data Lifecycle
-
-```text
-Raw Data
-   ↓
-DVC
-   ↓
-Validation
-   ↓
-EDA
-   ↓
-Preprocessing
-   ↓
-Feature Engineering
-   ↓
-ML-ready Dataset
-   ↓
-ML Training
-   ↓
-MLflow
-   ↓
-Model Registry
-   ↓
-API
-   ↓
-AWS
+    UI <-->|HTTPS REST / Bearer Token| API
+    API --> Auth
+    API --> Repo
+    API --> MLService
+    MLService --> MLflow
+    DVC --> DataStore
 ```
 
 ---
 
-# 6. Data Directory
+## Technology Stack
 
-```text
-data/
-├── raw/
-├── external/
-├── interim/
-├── processed/
-└── features/
-```
-
-### raw/
-
-Original extracted data. Never overwrite the original dataset.
-
-### external/
-
-External datasets or supplementary official sources.
-
-### interim/
-
-Validated and intermediate datasets.
-
-### processed/
-
-Cleaned and transformed analytical datasets.
-
-### features/
-
-Final ML-ready features and target datasets.
-
-All large datasets must be managed through DVC.
+| Layer | Technologies |
+| :--- | :--- |
+| **Frontend** | Next.js 14 (App Router), React 18, TypeScript, Tailwind CSS, Recharts, Lucide Icons, TopoJSON |
+| **Backend** | FastAPI, Python 3.12, Uvicorn (ASGI), Pydantic v2, PyJWT, Passlib, HTTPX |
+| **Machine Learning** | Scikit-learn, XGBoost, LightGBM, SHAP (TreeSHAP / LinearSHAP) |
+| **MLOps & Pipeline** | DVC (Data Version Control), MLflow (Registry & Tracking), SQLite |
+| **DevOps & Containers**| Docker, Docker Compose, GitHub Actions CI/CD (Ubuntu Latest, Node 20, Python 3.12) |
+| **Testing** | Pytest (80 automated tests), TypeScript (`tsc --noEmit`), ESLint |
 
 ---
 
-# 7. DVC Pipeline
-
-The initial DVC pipeline will contain:
+## Repository Structure
 
 ```text
-ingest
-   ↓
-validate
-   ↓
-eda
-   ↓
-preprocess
-   ↓
-feature_engineering
+├── .github/
+│   └── workflows/
+│       └── ci.yml                     # 3-stage automated CI pipeline (Pytest, Frontend, Docker smoke)
+├── backend/                           # Production FastAPI backend application
+│   ├── app/
+│   │   ├── api/v1/endpoints/          # 9 endpoint groups (auth, projects, predict, risk, states, etc.)
+│   │   ├── core/                      # Configuration, JWT security, and settings
+│   │   ├── repositories/              # Project and monthly observation in-memory index
+│   │   ├── schemas/                   # Pydantic v2 request/response validation models
+│   │   └── services/                  # Business logic, ML inference, and alert services
+│   ├── Dockerfile                     # Production multi-stage Python 3.12-slim container
+│   └── requirements.txt               # Pinned backend dependencies
+├── frontend/                          # Production Next.js 14 web dashboard
+│   ├── app/                           # 18 App Router pages (admin, ministry, agency, projects, etc.)
+│   ├── components/                    # Reusable UI cards, charts, and interactive India map
+│   ├── data/                          # Master JSON records and sector definitions
+│   ├── services/                      # Typed API client connecting to backend /api/v1
+│   ├── store/                         # Zustand auth and global state management
+│   ├── Dockerfile                     # Production multi-stage Node 20-alpine container
+│   └── package.json                   # Next.js 14.2.35 dependencies
+├── configs/
+│   └── model_params.yaml              # Hyperparameters for ML models
+├── data/
+│   ├── raw/paimana_time_overrun.csv   # Authoritative raw dataset (17,697 rows, 38 columns)
+│   ├── processed/                     # Cleaned, validated, and normalized datasets
+│   └── features/                      # CUF baseline (10 features) & Enhanced (48 features)
+├── models/                            # Production serialized model artifacts (.pkl)
+├── reports/                           # Technical analysis reports, dictionaries, and EDA figures
+├── src/
+│   ├── data/                          # DVC stages (ingest, validate, eda, preprocess, feature_engineering)
+│   ├── ml/                            # ML training, evaluation, model selection, anomaly detection
+│   └── mlops/                         # MLflow model registration scripts
+├── tests/                             # 80 automated unit, schema, and API tests
+│   ├── backend/                       # API endpoint, auth, and RBAC tests
+│   ├── data/                          # Schema invariants, bounds, and quality tests
+│   └── ml/                            # Anti-leakage, determinism, and risk score monotonicity tests
+├── docker-compose.yml                 # Multi-container orchestration stack
+├── dvc.yaml & dvc.lock                # 10-stage reproducible DVC pipeline definition
+└── docs/sih-2026/                     # Complete SIH 2026 judge-ready documentation suite
 ```
 
-The pipeline must be reproducible using:
+---
+
+## Quickstart: Running the Application Locally
+
+### Option A: Running via Docker Compose (Recommended)
+This launches the complete multi-container stack with both frontend and backend configured:
 
 ```bash
-dvc repro
+# 1. Clone repository
+git clone https://github.com/shaiksuhail-824/AI-Powered-Predictive-Analytics-Early-Warning-System-for-Infrastructure-Projects.git
+cd AI-Powered-Predictive-Analytics-Early-Warning-System-for-Infrastructure-Projects
+
+# 2. Setup environment variables template
+cp .env.example .env
+
+# 3. Build and launch containers in detached mode
+docker compose up --build -d
+
+# 4. Access live application services:
+# - Frontend Web Dashboard:     http://localhost:3000
+# - Backend API Gateway:        http://localhost:8000
+# - Interactive API Docs:       http://localhost:8000/api/v1/docs
+# - Health Verification:        http://localhost:8000/api/v1/health
 ```
 
-Parameters will be maintained in:
-
-```text
-params.yaml
-```
-
-Pipeline state will be recorded in:
-
-```text
-dvc.lock
-```
+### Pre-configured Demo Sign-In Credentials
+* **National Administrator (`ADMIN`):** Username `admin01` | Password `password123`
+* **Ministry Official (`MINISTRY_PROJECT_HEAD`):** Username `ministry01` | Password `password123`
+* **CPSE Contractor (`AGENCY_CONTRACTOR`):** Username `agency01` | Password `password123`
 
 ---
 
-# 8. Team Responsibilities
+## Automated Testing & CI/CD Pipeline
 
-The data team is responsible for producing:
-
-- Raw dataset
-- Data dictionary
-- Data-quality report
-- EDA report
-- Cleaned dataset
-- Processed dataset
-- Feature dataset
-- Feature dictionary
-- Target-definition proposal
-- DVC pipeline
-- Reproducibility documentation
-
-The final output of the data phase is:
-
-> A versioned, validated, reproducible, ML-ready infrastructure-project dataset.
-
----
-
-# 9. Important ML Principle & Future ML Pipeline
-
-The project must avoid data leakage. For early-warning prediction:
-
-```text
-Information available at time T
-              ↓
-         ML prediction
-              ↓
-        Future outcome
-```
-
-Information that would only become available after the event must not be used as a predictive feature.
-
-### Planned ML Problems
-
-- **Cost Overrun**: Predict the probability and/or magnitude of future cost escalation.
-- **Time Overrun**: Predict whether a project will experience a significant delay and estimate expected delay where supported by the data.
-- **Risk Score**: Combine relevant predictive signals into a project-level risk score.
-- **Early Warning**: Identify deteriorating project conditions before a major adverse outcome occurs.
+The repository enforces strict continuous verification. Every pull request executes:
+* **Backend Pytest Suite (80 Tests):**
+  ```bash
+  python -m pytest tests/ -v
+  ```
+* **Frontend TypeScript Compilation:**
+  ```bash
+  cd frontend && npx tsc --noEmit
+  ```
+* **Frontend ESLint:**
+  ```bash
+  cd frontend && npm run lint
+  ```
+* **Next.js Production Build:**
+  ```bash
+  cd frontend && npm run build
+  ```
+* **Docker Multi-Container Smoke Test:**
+  Validated in GitHub Actions on every push to `main` (Run #13) and `dev` (Run #16).
 
 ---
 
-# 10. CUF Analysis
+## SIH 2026 Complete Documentation Suite
 
-The PS requires assessment of the predictive value of existing CUF fields.
+Comprehensive technical, architecture, and judge-defense documents are available in [`docs/sih-2026/`](docs/sih-2026/):
 
-Therefore, the project will eventually compare:
-
-```text
-Model A
-CUF / existing project fields
-```
-
-against:
-
-```text
-Model B
-CUF fields
-+
-derived features
-+
-historical features
-+
-temporal features
-```
-
-The comparison will be evidence-based using appropriate evaluation metrics.
+1. [**Project Overview**](docs/sih-2026/01-project-overview.md) — Problem context, objectives, impact, target user personas.
+2. [**Problem & Motivation**](docs/sih-2026/02-problem-and-motivation.md) — Mega-project dynamics, flash reporting latency, leading vs lagging indicators.
+3. [**System Architecture**](docs/sih-2026/03-system-architecture.md) — 5-layer decoupled architecture with 6 modular Mermaid diagrams.
+4. [**Data Architecture & Dictionary**](docs/sih-2026/04-data-architecture.md) — Lineage, canonical models, anti-leakage rules, master field dictionary.
+5. [**Machine Learning Methodology**](docs/sih-2026/05-machine-learning-methodology.md) — XGBoost/RF/LogReg models, chronological temporal split, SHAP XAI.
+6. [**MLOps & Reproducibility**](docs/sih-2026/06-mlops-and-reproducibility.md) — DVC, MLflow registry, Docker Compose, GitHub Actions automation.
+7. [**API Documentation**](docs/sih-2026/07-api-documentation.md) — OpenAPI schemas, query parameters, and example JSON payloads across 9 endpoint groups.
+8. [**Frontend User Guide**](docs/sih-2026/08-frontend-user-guide.md) — Complete user journey, route catalog, and screenshot placeholders.
+9. [**Testing & Validation Report**](docs/sih-2026/09-testing-and-validation.md) — Pytest scorecard (80 tests pass), type checks, and smoke tests.
+10. [**Deployment Guide**](docs/sih-2026/10-deployment-guide.md) — Local Docker deployment and target AWS ECS/ALB cloud architecture.
+11. [**Security & Privacy**](docs/sih-2026/11-security-and-privacy.md) — JWT HS256, 3-tier RBAC, Pydantic bounds checking, container hardening.
+12. [**Limitations & Future Scope**](docs/sih-2026/12-limitations-and-future-scope.md) — Transparent technical audit and 3-phase national rollout roadmap.
+13. [**SIH Presentation & Demo Script**](docs/sih-2026/13-demo-script.md) — 5–7 minute live walkthrough with narration and failover plans.
+14. [**Judge FAQ**](docs/sih-2026/14-judge-faq.md) — 15 anticipated technical questions with concise, evidence-based answers.
+15. [**Evidence Checklist**](docs/sih-2026/evidence/evidence-checklist.md) — 22-point verification scorecard across all artifacts.
 
 ---
 
-# 11. Future API Layer & AWS Deployment
+## Deployment Status Notice
 
-### Future API Layer
-
-In subsequent phases, a FastAPI backend will expose inference endpoints for cost overrun probability, schedule delay estimation, project risk scores, and early warning alerts to serve the executive dashboard.
-
-### Future AWS Deployment
-
-Cloud infrastructure (storage, compute, containerization, and monitoring) will be deployed on AWS in later phases once the ML models and API layer pass evaluation and testing.
+* **Local Multi-Container Environment:** **VERIFIED & OPERATIONAL** (Docker Compose on ports 8000 and 3000).
+* **Target Cloud Deployment (AWS):** **PLANNED PRODUCTION ARCHITECTURE** (Documented with Amazon ECS Fargate, ALB, Route 53, and ECR). Cloud infrastructure is planned and not yet provisioned.
 
 ---
 
-# 12. Reproducibility Principle
+## Team Contributions
 
-A result should be traceable through:
-
-```text
-Git Commit
-    +
-DVC Dataset Version
-    +
-Pipeline Parameters
-    +
-Environment
-    ↓
-Reproducible Dataset
-    ↓
-MLflow Experiment
-```
-
-No important result should depend on an undocumented manual operation.
-
----
-
-# 13. Development Phases
-
-### Phase 1 — Data Foundation (Current)
-
-- Source identification
-- Dataset extraction
-- Raw dataset creation
-- DVC initialization
-- Data validation
-
-### Phase 2 — Data Analysis (Current)
-
-- Data dictionary
-- Data-quality analysis
-- EDA
-- Data cleaning
-
-### Phase 3 — Feature Engineering (Current)
-
-- Temporal features
-- Financial features
-- Progress features
-- Schedule features
-- Project-level aggregates
-
-### Phase 4 — Machine Learning (Future)
-
-- Statistical baselines
-- ML models
-- Model evaluation
-- Explainability
-
-### Phase 5 — MLflow (Future)
-
-- Experiment tracking
-- Metrics
-- Model artifacts
-- Model registry
-
-### Phase 6 — MLOps (Future)
-
-- Testing
-- Docker
-- CI/CD
-- Model versioning
-
-### Phase 7 — Backend (Future)
-
-- FastAPI
-- Prediction APIs
-- Risk APIs
-
-### Phase 8 — Frontend (Future)
-
-- Executive dashboard
-- Project details
-- Risk dashboard
-- Early-warning center
-
-### Phase 9 — AWS (Future)
-
-- Storage
-- Compute
-- Deployment
-- Monitoring
-- Security
-
----
-
-# 14. Engineering Principle
-
-Build the simplest architecture that can demonstrate the SIH problem convincingly.
-
-Do not add technologies merely to increase the technology list.
-
-Every component must have a clear purpose in solving the infrastructure-monitoring problem.
-
----
-
-# 15. Documentation & Reports
-
-- [Data Team Guide](docs/DATA_TEAM_README.md)
-- [DVC Data Pipeline](docs/DATA_PIPELINE.md)
-- [Data Dictionary](reports/data_dictionary.md)
-- [Data Quality Audit](reports/data_quality.md)
-- [EDA Report](reports/eda_report.md)
-- [Feature Dictionary](reports/feature_dictionary.md)
-- [CUF Feature Mapping Matrix](reports/cuf_feature_mapping.md)
-- [Data Leakage Audit](reports/data_leakage_audit.md)
-- [Repository Baseline Audit](reports/repository_audit.md)
-- [Source Ingestion Metadata](reports/source_metadata.md)
-
----
-
-# 16. Quickstart: Reproducing the Data Foundation
-
-### 1. Setup Environment
-```bash
-# Using uv (recommended)
-uv sync
-
-# Or using standard pip
-pip install -r requirements.txt
-```
-
-### 2. Run Entire Data Pipeline with DVC
-```bash
-dvc repro
-```
-
-### 3. Run Automated Quality & Regression Tests
-```bash
-pytest tests/data/ -v
-```
-
-### 4. Interactive Analytical Notebooks
-Launch Jupyter to explore:
-- `notebooks/01_data_understanding.ipynb`
-- `notebooks/02_data_quality.ipynb`
-- `notebooks/03_eda.ipynb`
-- `notebooks/04_feature_analysis.ipynb`
+* **Smart India Hackathon 2026 Team:** SIH26103 Development Team
+* **Primary Contacts / Team Members:**
+  * To be completed by the team prior to final submission.
