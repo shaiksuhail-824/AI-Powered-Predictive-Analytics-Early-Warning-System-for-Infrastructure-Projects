@@ -204,8 +204,22 @@ Comprehensive technical, architecture, and judge-defense documents are available
 
 ---
 
-## Team Contributions
+## Team Contribution
 
-* **Smart India Hackathon 2026 Team:** SIH26103 Development Team
-* **Primary Contacts / Team Members:**
-  * To be completed by the team prior to final submission.
+Our team combines expertise in data analysis, machine learning, frontend development, MLOps, and cloud deployment to build the AI-Powered Predictive Analytics and Early-Warning System for Infrastructure Projects.
+
+| Team Member | Role | Responsibilities |
+|---|---|---|
+| **Shaik Suhail** | Team Lead | MLOps, project coordination, Docker integration, CI/CD, and AWS ECS deployment |
+| **Muzkeer** | Machine Learning and LLM | Machine learning model development, LLM integration, model evaluation, and predictive analytics |
+| **Ahamed** | Frontend Developer | Frontend interface development, dashboard design, and user interaction |
+| **Sharukh** | Data Analyst | Data collection, data cleaning, exploratory data analysis, and feature preparation |
+| **Varshini** | Data Analyst | Data preprocessing, data validation, exploratory data analysis, and dataset preparation |
+| **Likhitha** | Frontend Developer | Frontend development, UI components, dashboard integration, and usability improvements |
+
+### Contribution Summary
+
+- **Data Analysis:** Varshini and Sharukh handled data collection, preprocessing, cleaning, validation, exploratory analysis, and feature preparation.
+- **Machine Learning and LLM:** Muzkeer worked on predictive analytics, machine learning models, model evaluation, and LLM-related integration.
+- **Frontend Development:** Ahamed and Likhitha developed the frontend interface, dashboards, UI components, and user interaction workflows.
+- **MLOps and Cloud Deployment:** Shaik Suhail handled experiment tracking, data and model versioning, Docker-based integration, CI/CD workflows, and planned AWS ECS deployment.
