@@ -22,8 +22,12 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-ENV NEXT_TELEMETRY_DISABLED=1
-ENV NODE_ENV=production
+ARG BACKEND_URL=http://backend:8000
+ARG INTERNAL_API_URL=http://backend:8000/api/v1
+ENV NEXT_TELEMETRY_DISABLED=1 \
+    NODE_ENV=production \
+    BACKEND_URL=${BACKEND_URL} \
+    INTERNAL_API_URL=${INTERNAL_API_URL}
 
 RUN npm run build
 
@@ -35,6 +39,8 @@ WORKDIR /app
 
 ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1 \
+    BACKEND_URL=http://backend:8000 \
+    INTERNAL_API_URL=http://backend:8000/api/v1 \
     PORT=3000 \
     HOSTNAME="0.0.0.0"
 
@@ -55,7 +61,7 @@ USER nextjs
 EXPOSE 3000
 
 # Health check using built-in Alpine wget
-HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+HEALTHCHECK --interval=15s --timeout=5s --start-period=30s --retries=3 \
     CMD wget --no-verbose --tries=1 --spider http://localhost:3000 || exit 1
 
 CMD ["npm", "run", "start"]

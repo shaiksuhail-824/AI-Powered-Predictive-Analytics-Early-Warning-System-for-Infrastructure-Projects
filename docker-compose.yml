@@ -3,7 +3,6 @@
 # Multi-Container Orchestration: Next.js Frontend + FastAPI Backend
 # ==============================================================================
 
-version: "3.8"
 
 services:
   # ----------------------------------------------------------------------------
@@ -25,10 +24,10 @@ services:
       - ACCESS_TOKEN_EXPIRE_MINUTES=720
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
-      interval: 15s
+      interval: 10s
       timeout: 5s
-      retries: 3
-      start_period: 15s
+      retries: 5
+      start_period: 60s
     restart: unless-stopped
     networks:
       - paimana-network
@@ -40,6 +39,9 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        - BACKEND_URL=http://backend:8000
+        - INTERNAL_API_URL=http://backend:8000/api/v1
     container_name: paimana-frontend
     ports:
       - "3000:3000"
@@ -56,7 +58,7 @@ services:
       interval: 15s
       timeout: 5s
       retries: 3
-      start_period: 20s
+      start_period: 30s
     restart: unless-stopped
     networks:
       - paimana-network
