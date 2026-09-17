@@ -51,3 +51,6 @@ $RECYCLE.BIN/
 data/dvc_remote_storage/
 data/external/
 *.csv
+
+# Exclude AWS deploy workflow (PAT lacks workflow scope)
+.github/workflows/aws-deploy.yml

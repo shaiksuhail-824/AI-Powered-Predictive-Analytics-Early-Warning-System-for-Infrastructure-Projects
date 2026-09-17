@@ -133,7 +133,7 @@ sequenceDiagram
 
 ---
 
-### Diagram 5: Deployment Architecture (Local vs. Target AWS)
+### Diagram 5: Deployment Architecture (Local vs. AWS ECS + ALB)
 
 ```mermaid
 flowchart TB
@@ -146,25 +146,31 @@ flowchart TB
         DockerBridge --- C_BE
     end
 
-    subgraph AWSPlanned ["Planned AWS Cloud Architecture (Production Target)"]
-        Route53["Amazon Route 53 (DNS)"]
-        ACM["AWS Certificate Manager (SSL/TLS)"]
-        ALB["Application Load Balancer (ALB)"]
+    subgraph AWSArchitecture ["AWS Cloud Deployment Architecture (ap-south-1)"]
+        Client["Browser Client / Official User"]
+        ALB["Application Load Balancer (ALB)<br/>paimana-alb (Multi-AZ)"]
         
-        subgraph VPC ["Amazon VPC (Public & Private Subnets)"]
-            ECS_FE["ECS Fargate: Frontend Tasks<br/>(Auto-scaled 2+ instances)"]
-            ECS_BE["ECS Fargate: Backend Tasks<br/>(Auto-scaled 2+ instances)"]
-            S3["Amazon S3<br/>(DVC Remote & Model Artifacts)"]
-            Secrets["AWS Secrets Manager<br/>(JWT Secret & API Keys)"]
+        subgraph TargetGroups ["Target Groups (IP Mode)"]
+            TG_FE["Frontend Target Group (:3000)<br/>Health Check: /"]
+            TG_BE["Backend Target Group (:8000)<br/>Health Check: /api/v1/health"]
+        end
+
+        subgraph ECS_Cluster ["Amazon ECS Cluster (paimana-cluster)"]
+            ECS_FE["ECS Fargate: paimana-frontend-service<br/>(Port 3000, 0.25 vCPU, 512 MB)"]
+            ECS_BE["ECS Fargate: paimana-backend-service<br/>(Port 8000, 0.50 vCPU, 1024 MB)"]
         end
         
-        Route53 --> ALB
-        ACM -.-> ALB
-        ALB -->|Route /*| ECS_FE
-        ALB -->|Route /api/v1/*| ECS_BE
-        ECS_FE <-->|Internal VPC Calls| ECS_BE
-        ECS_BE --> S3
-        ECS_BE --> Secrets
+        subgraph Registries_Logs ["Container Registries & Observability"]
+            ECR["Amazon ECR Repositories<br/>(paimana-frontend & paimana-backend)"]
+            CW["CloudWatch Log Groups<br/>(/ecs/paimana-frontend, /ecs/paimana-backend)"]
+        end
+
+        Client --> ALB
+        ALB -->|Default /*| TG_FE --> ECS_FE
+        ALB -->|Path /api/*| TG_BE --> ECS_BE
+        ECS_FE -.->|Browser API calls via ALB /api/*| ALB
+        ECR -.->|Image Pulls| ECS_FE & ECS_BE
+        ECS_FE & ECS_BE --> CW
     end
 ```
 
@@ -234,11 +240,13 @@ The frontend in [`frontend/`](file:///c:/Users/varsh/OneDrive/Documents/AI-Power
 ---
 
 ## 4. Deployment Status: Implemented vs. Planned
-
+ 
 | Layer / Component | Technology | Implementation Status | Verification Evidence |
 | :--- | :--- | :--- | :--- |
-| **Local Orchestration** | Docker Compose | **IMPLEMENTED** | Multi-container stack up and healthy on ports 8000 and 3000. |
-| **CI/CD Pipeline** | GitHub Actions | **IMPLEMENTED** | 100% green CI runs on `main` (Run #13) and `dev` (Run #16). |
-| **Data Versioning** | DVC (Data Version Control) | **IMPLEMENTED** | 10-stage DAG locked in `dvc.lock` and `dvc.yaml`. |
-| **Experiment Tracking** | MLflow | **IMPLEMENTED** | Tracked in `mlruns/` and `reports/mlops_registry_catalog.json`. |
-| **Cloud Hosting (AWS)** | Amazon ECS, ALB, ECR | **PLANNED** | Architecture specified; cloud resources not yet provisioned. |
+| **Local Orchestration** | Docker Compose | **COMPLETED & VERIFIED** | Multi-container stack up and healthy on ports 8000 and 3000. |
+| **CI/CD Pipeline** | GitHub Actions | **COMPLETED & VERIFIED** | Automated CI workflow passes all backend & frontend checks. |
+| **Data Versioning** | DVC (Data Version Control) | **COMPLETED & VERIFIED** | 10-stage DAG locked in `dvc.lock` and `dvc.yaml`. |
+| **Experiment Tracking** | MLflow | **COMPLETED & VERIFIED** | Tracked in `mlruns/` and `reports/mlops_registry_catalog.json`. |
+| **Amazon ECR & ALB** | AWS ECR, ALB, Target Groups | **COMPLETED & VERIFIED** | ECR repos, ALB, and Target Groups provisioned in `ap-south-1`. |
+| **Amazon ECS Services** | ECS Fargate Services | **CONFIGURED BUT NOT VERIFIED** | Task definitions & service automation configured in two-phase pipeline. |
+| **Cloud Domain & TLS** | Amazon Route 53, ACM | **PLANNED** | Production SSL domain mapping planned for ministry release. |

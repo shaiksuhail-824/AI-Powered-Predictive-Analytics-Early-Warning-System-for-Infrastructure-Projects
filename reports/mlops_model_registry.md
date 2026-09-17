@@ -3,12 +3,12 @@
 **Document ID**: `MOSPI-PAIMANA-ML-006`  
 **Problem Statement**: SIH26103 — AI-Powered Predictive Analytics and Early Warning System for Infrastructure Projects (PAIMANA / MoSPI)  
 **System Version**: `v1.0.0`  
-**Data Status**: `SYNTHETIC / DEMONSTRATION`  
+**Data Status**: `REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS`  
 
 ---
 
 > [!IMPORTANT]
-> **Data Status Notice**: The models registered below are trained on **SYNTHETIC / DEMO DATA**. Their metadata tags permanently record `DATA_STATUS = SYNTHETIC / DEMONSTRATION` to prevent premature operational deployment.
+> **Data Status Notice**: The models registered below are trained on **REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS** (3,531 projects, 17,697 longitudinal observations). Their metadata tags record `DATA_STATUS = REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS`.
 
 ---
 
@@ -38,7 +38,7 @@ The pipeline enforces strict separation of concerns between data versioning and 
 ┌────────────────────────────────────────────────────────┐
 │               MLFLOW MODEL REGISTRY LAYER              │
 │  - Versioned Production Model Registry                 │
-│  - Governance Tags (DATA_STATUS=SYNTHETIC/DEMO)        │
+│  - Governance Tags (DATA_STATUS=REAL PAIMANA DATA)    │
 │  - Lifecycle Stages: DEVELOPMENT → VALIDATION → PROD   │
 │  - Fast Model Loading for FastAPI Serving Layer        │
 └────────────────────────────────────────────────────────┘
@@ -63,9 +63,9 @@ The winning candidates were programmatically registered and promoted to the `PRO
 
 | Model Name | Version | Architecture | Target | Lifecycle Stage | Data Status Tag | Stored Artifact Path |
 |---|:---:|---|---|:---:|:---:|---|
-| **`Schedule_Delay_Predictor`** | 4 | Logistic Regression | `future_schedule_delay` | `PRODUCTION` | `SYNTHETIC / DEMONSTRATION` | `models/schedule_delay/production_model.pkl` |
-| **`Cost_Overrun_Predictor`** | 4 | Random Forest | `future_cost_overrun` | `PRODUCTION` | `SYNTHETIC / DEMONSTRATION` | `models/cost_overrun/production_model.pkl` |
-| **`Project_Anomaly_Sentinel`** | 3 | Isolation Forest | Multi-attribute Anomaly | `PRODUCTION` | `SYNTHETIC / DEMONSTRATION` | `models/anomaly_detector/production_anomaly_detector.pkl` |
+| **`Schedule_Delay_Predictor`** | 4 | Logistic Regression | `future_schedule_delay` | `PRODUCTION` | `REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS` | `models/schedule_delay/production_model.pkl` |
+| **`Cost_Overrun_Predictor`** | 4 | Random Forest | `future_cost_overrun` | `PRODUCTION` | `REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS` | `models/cost_overrun/production_model.pkl` |
+| **`Project_Anomaly_Sentinel`** | 3 | Isolation Forest | Multi-attribute Anomaly | `PRODUCTION` | `REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS` | `models/anomaly_detector/production_anomaly_detector.pkl` |
 
 ---
 

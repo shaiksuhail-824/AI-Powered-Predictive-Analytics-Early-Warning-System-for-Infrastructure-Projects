@@ -36,4 +36,4 @@ class SingleProjectPredictionResponse(BaseModel):
     intervention_priority: InterventionPriorityEnum
     top_risk_drivers: List[DriverImpact]
     what_changed_since_last_month: Optional[Dict[str, Any]] = None
-    data_status: str = Field("SYNTHETIC / DEMONSTRATION", description="Regulatory provenance flag")
+    data_status: str = Field("REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS", description="Regulatory provenance flag")

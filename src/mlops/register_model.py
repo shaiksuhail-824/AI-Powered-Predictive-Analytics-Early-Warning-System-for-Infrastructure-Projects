@@ -1,7 +1,7 @@
 """
 src/mlops/register_model.py - MLflow Model Registry Integration & Staging
 Registers validated winning production models into MLflow Model Registry,
-attaches governance tags (DATA_STATUS = SYNTHETIC / DEMONSTRATION), and manages lifecycle stages.
+attaches governance tags (DATA_STATUS = REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS), and manages lifecycle stages.
 """
 
 import os

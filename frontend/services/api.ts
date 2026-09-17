@@ -116,7 +116,7 @@ export function mapBackendToProject(item: any): Project {
     anomalyStatus: item.anomaly_status || undefined,
     interventionPriority: item.intervention_priority || undefined,
     timeOverrunDays: item.time_overrun_days != null ? Math.round(item.time_overrun_days) : undefined,
-    dataStatus: item.data_status || 'SYNTHETIC / DEMONSTRATION',
+    dataStatus: item.data_status || 'REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS',
   };
 }
 

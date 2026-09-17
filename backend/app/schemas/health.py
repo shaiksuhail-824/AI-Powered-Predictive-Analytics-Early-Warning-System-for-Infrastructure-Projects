@@ -13,5 +13,5 @@ class HealthResponse(BaseModel):
     total_projects: int = Field(..., description="Total unique projects indexed")
     total_observations: int = Field(..., description="Total monthly observation rows")
     models_loaded: bool = Field(..., description="Whether production ML models are ready")
-    data_status: str = Field(..., json_schema_extra={"example": "SYNTHETIC / DEMONSTRATION"})
+    data_status: str = Field(..., json_schema_extra={"example": "REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS"})
     timestamp: str = Field(..., description="ISO 8601 UTC timestamp of check")

@@ -198,7 +198,7 @@ def train_all_models(config_path: str = "configs/model_params.yaml") -> Dict[str
                     mlflow.log_param("feature_type", feat_type)
                     mlflow.log_param("model_type", m_type)
                     mlflow.log_param("features_count", len(feature_cols))
-                    mlflow.log_param("data_status", config.get("metadata", {}).get("data_status", "SYNTHETIC / DEMONSTRATION"))
+                    mlflow.log_param("data_status", config.get("metadata", {}).get("data_status", "REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS"))
                     mlflow.log_param("train_samples", len(X_train))
                     mlflow.log_param("val_samples", len(X_val))
                     mlflow.log_param("test_samples", len(X_test))
@@ -223,7 +223,7 @@ def train_all_models(config_path: str = "configs/model_params.yaml") -> Dict[str
                             "train_metrics": train_metrics,
                             "val_metrics": val_metrics,
                             "test_metrics": test_metrics,
-                            "data_status": config.get("metadata", {}).get("data_status", "SYNTHETIC / DEMONSTRATION")
+                            "data_status": config.get("metadata", {}).get("data_status", "REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS")
                         }, f)
 
                     mlflow.log_artifact(model_path, artifact_path="model_package")

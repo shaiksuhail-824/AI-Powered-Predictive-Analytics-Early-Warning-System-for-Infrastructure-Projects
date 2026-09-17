@@ -26,7 +26,7 @@ class RiskPrediction(BaseModel):
     intervention_priority: InterventionPriorityEnum
     top_risk_drivers: List[DriverImpact]
     what_changed_since_last_month: Optional[Dict[str, Any]] = None
-    data_status: str = Field("SYNTHETIC / DEMONSTRATION", description="Regulatory notice flag")
+    data_status: str = Field("REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS", description="Regulatory notice flag")
 
 
 class RiskDistribution(BaseModel):
@@ -44,4 +44,4 @@ class RiskSummary(BaseModel):
     anomaly_distribution: Dict[str, int]
     intervention_priority_distribution: Dict[str, int]
     primary_risk_driver_distribution: Dict[str, int]
-    data_status: str = Field("SYNTHETIC / DEMONSTRATION", description="Regulatory notice flag")
+    data_status: str = Field("REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS", description="Regulatory notice flag")

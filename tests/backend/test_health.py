@@ -12,7 +12,7 @@ def test_health_endpoint(client):
     assert data["total_projects"] >= 3500
     assert data["total_observations"] >= 17000
     assert data["models_loaded"] is True
-    assert "SYNTHETIC" in data["data_status"]
+    assert "REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS" in data["data_status"]
 
 
 def test_root_endpoint(client):

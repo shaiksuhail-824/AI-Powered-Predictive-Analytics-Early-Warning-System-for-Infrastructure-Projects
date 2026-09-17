@@ -40,7 +40,7 @@ def test_anomaly_model_artifact_exists_and_loads():
     assert len(pkg["feature_cols"]) > 0
 
 
-def test_anomaly_scoring_on_synthetic_instance():
+def test_anomaly_scoring_on_sample_instance():
     artifact_path = "models/anomaly_detector/production_anomaly_detector.pkl"
     with open(artifact_path, "rb") as f:
         pkg = pickle.load(f)

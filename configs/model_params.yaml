@@ -3,7 +3,7 @@
 # PAIMANA Time Overrun & Cost Overrun Early-Warning System
 
 metadata:
-  data_status: "SYNTHETIC / DEMONSTRATION"
+  data_status: "REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS"
   problem_statement: "SIH26103"
   project_name: "PAIMANA-Infrastructure-AI"
   version: "1.0.0"

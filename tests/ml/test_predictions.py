@@ -42,7 +42,7 @@ def test_predict_single_generates_valid_schema(predictor, sample_data):
     assert res["risk_level"] in {"LOW", "MEDIUM", "HIGH", "CRITICAL"}
     assert res["anomaly_status"] in {"NORMAL", "UNUSUAL", "ANOMALOUS", "REQUIRES_VERIFICATION"}
     assert res["intervention_priority"] in {"LOW", "MEDIUM", "HIGH", "CRITICAL_INTERVENTION"}
-    assert res["data_status"] == "SYNTHETIC / DEMONSTRATION"
+    assert res["data_status"] == "REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS"
 
 
 def test_predict_batch_returns_expected_rows(predictor, sample_data):

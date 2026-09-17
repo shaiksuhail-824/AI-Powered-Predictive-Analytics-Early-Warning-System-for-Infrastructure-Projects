@@ -57,4 +57,4 @@ class ProjectDetail(ProjectSummary):
     approval_date: Optional[str] = Field(None, description="Sanction date")
     original_completion_date: Optional[str] = Field(None, description="Original target DOC")
     revised_completion_date: Optional[str] = Field(None, description="Revised target DOC")
-    data_status: str = Field("SYNTHETIC / DEMONSTRATION", description="Regulatory provenance flag")
+    data_status: str = Field("REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS", description="Regulatory provenance flag")

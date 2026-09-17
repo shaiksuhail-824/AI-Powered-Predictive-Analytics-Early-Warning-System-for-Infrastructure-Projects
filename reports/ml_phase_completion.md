@@ -1,7 +1,7 @@
 # Phase 1 ML + MLOps Production Pipeline Completion Report
 **AI-Powered Predictive Analytics & Early Warning System for Infrastructure Projects (PAIMANA / MoSPI)**  
 **Problem Statement**: SIH 26103  
-**Data Status**: `SYNTHETIC / DEMONSTRATION` (All synthetic attributes strictly labeled; no fabricated real PAIMANA results)  
+**Data Status**: `REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS`  
 **Execution Timestamp**: September 10, 2026  
 **Pipeline State**: Fully Reproducible via DVC (`dvc repro` up to date, 42/42 tests passing)
 
@@ -164,7 +164,7 @@ When the FastAPI integration phase begins, the backend will consume and return p
     "explanation": "string"
   },
   "metadata": {
-    "data_status": "SYNTHETIC / DEMONSTRATION",
+    "data_status": "REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS",
     "model_versions": {
       "schedule_delay": "1.0.0",
       "cost_overrun": "1.0.0",

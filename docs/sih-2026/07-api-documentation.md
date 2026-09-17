@@ -62,7 +62,7 @@ Checks backend responsiveness, in-memory repository readiness, and production ML
   "total_projects": 3531,
   "total_observations": 17697,
   "models_loaded": true,
-  "data_status": "SYNTHETIC / DEMONSTRATION",
+  "data_status": "REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS",
   "timestamp": "2026-09-13T10:00:00.000Z"
 }
 ```
@@ -202,7 +202,7 @@ Executes real-time inference across all three production ML models (Schedule, Co
       "value": 16.34
     }
   ],
-  "data_status": "SYNTHETIC / DEMONSTRATION"
+  "data_status": "REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS"
 }
 ```
 

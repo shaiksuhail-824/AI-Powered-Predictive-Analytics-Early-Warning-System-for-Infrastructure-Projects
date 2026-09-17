@@ -117,7 +117,7 @@ def train_anomaly_sentinel(config_path: str = "configs/model_params.yaml") -> Di
             "pipeline": pipeline,
             "feature_cols": feat_cols,
             "thresholds": config.get("anomaly_sentinel", {}).get("thresholds", {}),
-            "data_status": config.get("metadata", {}).get("data_status", "SYNTHETIC / DEMONSTRATION")
+            "data_status": config.get("metadata", {}).get("data_status", "REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS")
         }, f)
 
     print(f"[ANOMALY SENTINEL] Persisted anomaly detector to {artifact_path}")

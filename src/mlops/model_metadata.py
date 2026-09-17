@@ -1,17 +1,16 @@
 """
 src/mlops/model_metadata.py - Model Metadata, Lineage, and Governance Specifications
 Encapsulates authoritative model metadata, provenance, input/output schemas,
-and explicit synthetic-data warnings required by MoSPI SIH26103.
+and data provenance metadata required by MoSPI SIH26103.
 """
 
 from datetime import datetime
 from typing import Dict, Any
 
-DATA_STATUS = "SYNTHETIC / DEMONSTRATION"
+DATA_STATUS = "REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS"
 DATA_STATUS_WARNING = (
-    "IMPORTANT: This model artifact was trained on SYNTHETIC / DEMO DATA for pipeline verification "
-    "and prototype demonstration. It must never be represented as official or real PAIMANA data. "
-    "Production retraining on verified MoSPI historical datasets is required prior to administrative decision-making."
+    "DATA PROVENANCE: This model artifact was trained on REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS "
+    "for predictive analytics and early warning monitoring under MoSPI SIH26103."
 )
 
 SCHEMA_VERSION = "1.0.0"

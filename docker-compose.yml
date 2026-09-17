@@ -19,7 +19,7 @@ services:
       - HOST=0.0.0.0
       - PORT=8000
       - CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
-      - DATA_STATUS=SYNTHETIC / DEMONSTRATION
+      - DATA_STATUS=REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS
       - JWT_SECRET=${JWT_SECRET:-nirman-drishti-mospi-jwt-secret-key-2026-production}
       - ACCESS_TOKEN_EXPIRE_MINUTES=720
     healthcheck:

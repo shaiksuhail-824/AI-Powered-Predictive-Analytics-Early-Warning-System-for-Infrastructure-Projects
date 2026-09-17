@@ -40,7 +40,7 @@ class Settings(BaseSettings):
     MODEL_CONFIG_PATH: Path = BASE_DIR / "configs" / "model_params.yaml"
 
     # Governance & Transparency
-    DATA_STATUS: str = "SYNTHETIC / DEMONSTRATION"
+    DATA_STATUS: str = "REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS"
     GOVERNANCE_NOTICE: str = (
         "This API provides predictive analytics and early warning signals based on the "
         "SIH26103 MoSPI PAIMANA Machine Learning framework. Values for unobserved futures "

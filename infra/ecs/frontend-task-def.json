@@ -1,0 +1,38 @@
+{
+  "family": "paimana-frontend",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "executionRoleArn": "arn:aws:iam::<AWS_ACCOUNT_ID>:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "name": "paimana-frontend",
+      "image": "<FRONTEND_IMAGE_URI>",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 3000,
+          "hostPort": 3000,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {"name": "NODE_ENV", "value": "production"},
+        {"name": "NEXT_TELEMETRY_DISABLED", "value": "1"},
+        {"name": "BACKEND_URL", "value": "http://<ALB_DNS_NAME>"},
+        {"name": "INTERNAL_API_URL", "value": "http://<ALB_DNS_NAME>/api/v1"},
+        {"name": "PORT", "value": "3000"},
+        {"name": "HOSTNAME", "value": "0.0.0.0"}
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/paimana-frontend",
+          "awslogs-region": "ap-south-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ]
+}

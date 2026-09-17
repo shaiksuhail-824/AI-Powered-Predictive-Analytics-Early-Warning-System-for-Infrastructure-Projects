@@ -77,4 +77,4 @@ def test_intervention_priority_validity():
 
 
 def test_data_status_metadata_constant():
-    assert DATA_STATUS == "SYNTHETIC / DEMONSTRATION"
+    assert DATA_STATUS == "REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS"

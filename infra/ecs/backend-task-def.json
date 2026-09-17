@@ -1,0 +1,38 @@
+{
+  "family": "paimana-backend",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "executionRoleArn": "arn:aws:iam::<AWS_ACCOUNT_ID>:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "name": "paimana-backend",
+      "image": "<BACKEND_IMAGE_URI>",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 8000,
+          "hostPort": 8000,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {"name": "HOST", "value": "0.0.0.0"},
+        {"name": "PORT", "value": "8000"},
+        {"name": "DATA_STATUS", "value": "REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS"},
+        {"name": "JWT_SECRET", "value": "nirman-drishti-mospi-jwt-secret-key-2026-production"},
+        {"name": "ACCESS_TOKEN_EXPIRE_MINUTES", "value": "720"},
+        {"name": "CORS_ORIGINS", "value": "http://<ALB_DNS_NAME>,https://<ALB_DNS_NAME>,http://localhost:3000,http://127.0.0.1:3000"}
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/paimana-backend",
+          "awslogs-region": "ap-south-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ]
+}

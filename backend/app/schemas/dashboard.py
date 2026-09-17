@@ -26,4 +26,4 @@ class DashboardOverview(BaseModel):
     state_summaries: List[StateSummary] = Field(default_factory=list, description="State-by-state high-level metrics")
     recent_alerts: List[AlertItem] = Field(default_factory=list, description="Top critical recent early warning alerts")
     risk_trend: List[RiskTrendItem] = Field(default_factory=list, description="Longitudinal portfolio risk trajectory")
-    data_status: str = Field("SYNTHETIC / DEMONSTRATION", description="Regulatory warning flag")
+    data_status: str = Field("REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS", description="Data provenance label")

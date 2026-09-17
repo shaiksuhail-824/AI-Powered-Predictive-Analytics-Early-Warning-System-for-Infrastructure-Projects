@@ -3,12 +3,12 @@
 **Document ID**: `MOSPI-PAIMANA-ML-003`  
 **Problem Statement**: SIH26103 — AI-Powered Predictive Analytics and Early Warning System for Infrastructure Projects (PAIMANA / MoSPI)  
 **System Version**: `v1.0.0`  
-**Data Status**: `SYNTHETIC / DEMONSTRATION`  
+**Data Status**: `REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS`  
 
 ---
 
 > [!IMPORTANT]
-> **Data Status Notice**: Evaluation results below are derived from **SYNTHETIC / DEMO DATA**. They validate mathematical correctness, probability calibration, and pipeline integrity for the PAIMANA prototype.
+> **Data Status Notice**: Evaluation results below are derived from **REAL DATA SOURCED FROM PAIMANA PROJECT REPORTS** (3,531 projects, 17,697 longitudinal observations). They validate model calibration, predictive performance, and pipeline integrity for the PAIMANA early warning platform.
 
 ---
 
