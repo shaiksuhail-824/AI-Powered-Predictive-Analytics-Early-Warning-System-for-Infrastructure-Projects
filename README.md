@@ -145,9 +145,9 @@ docker compose up --build -d
 ```
 
 ### Pre-configured Demo Sign-In Credentials
-* **National Administrator (`ADMIN`):** Username `admin01` | Password `password123`
-* **Ministry Official (`MINISTRY_PROJECT_HEAD`):** Username `ministry01` | Password `password123`
-* **CPSE Contractor (`AGENCY_CONTRACTOR`):** Username `agency01` | Password `password123`
+* **National Administrator (`ADMIN`):** Username `admin01` | Password `admin123` (or `Admin@2026#Secure`)
+* **Ministry Official (`MINISTRY_PROJECT_HEAD`):** Username `ministry01` | Password `ministry123` (or `Ministry@2026#Secure`)
+* **CPSE Contractor (`AGENCY_CONTRACTOR`):** Username `agency01` | Password `agency123` (or `Agency@2026#Secure`)
 
 ---
 
@@ -195,14 +195,59 @@ Comprehensive technical, architecture, and judge-defense documents are available
 14. [**Judge FAQ**](docs/sih-2026/14-judge-faq.md) — 15 anticipated technical questions with concise, evidence-based answers.
 15. [**Evidence Checklist**](docs/sih-2026/evidence/evidence-checklist.md) — 22-point verification scorecard across all artifacts.
 
+## AWS Cloud Deployment Status & Verification
+
+The MoSPI PAIMANA platform was successfully deployed, verified, and load-tested on **Amazon Web Services (ap-south-1, Mumbai)** using serverless container orchestration:
+
+* **Amazon ECS on AWS Fargate:** Managed serverless tasks running the Next.js 14 web client (`paimana-frontend-service`) and FastAPI API backend (`paimana-backend-service`).
+* **Amazon Elastic Container Registry (ECR):** Versioned Docker registries (`paimana-frontend`, `paimana-backend`) with immutable Git commit SHA image tagging (`b5fdbea`).
+* **Application Load Balancer (ALB):** Multi-AZ internet-facing ALB (`paimana-alb`) with path-based routing rules (`/api/*` mapped to the backend on port 8000; default `/*` routed to frontend on port 3000).
+* **Target Groups & Health Probes:** `paimana-fe-tg` (:3000) and `paimana-be-tg` (:8000) actively monitoring health checks with HTTP 200 responses.
+* **GitHub Actions CI/CD:** Continuous automated validation executing 80 backend Pytest test cases, Next.js TypeScript compilation, and Docker smoke tests.
+
+> [!NOTE]
+> **Cost Management & Infrastructure Cleanup:**  
+> Following successful live deployment and capture of verification evidence, all chargeable AWS cloud resources (ECS services, cluster, Application Load Balancer, target groups, security groups, CloudWatch logs, and ECR repositories) were safely decommissioned to prevent ongoing hosting charges.  
+> 
+> The entire cloud infrastructure and application stack can be fully recreated and redeployed at any time using:
+> ```bash
+> # Step 1: Bootstrap foundation (VPC, Subnets, Security Groups, ALB, Target Groups, ECR)
+> ./scripts/bootstrap-infrastructure.sh --approve
+>
+> # Step 2: Build, tag, push images, and deploy ECS services
+> ./deploy.sh
+> ```
+
 ---
 
-## Deployment Status Notice
+### Deployment Evidence & Screenshots
 
-* **Local Multi-Container Environment:** **VERIFIED & OPERATIONAL** (Docker Compose on ports 8000 and 3000).
-* **Target Cloud Deployment (AWS):** **PLANNED PRODUCTION ARCHITECTURE** (Documented with Amazon ECS Fargate, ALB, Route 53, and ECR). Cloud infrastructure is planned and not yet provisioned.
+The following screenshots record the live deployment state on AWS prior to cleanup:
 
----
+#### 1. Live Frontend via Application Load Balancer
+The Next.js 14 web application successfully loading and serving over the internet through the Application Load Balancer URL:
+![Frontend Live via Application Load Balancer](docs/screenshots/frontend-live.png)
+
+#### 2. Backend Health Probe Verification
+The FastAPI backend health check returning HTTP 200 OK via the ALB path rule (`/api/v1/health`), confirming dataset and ML model initialization:
+![Backend Health Probe](docs/screenshots/backend-health.png)
+
+#### 3. Amazon ECS Services & Fargate Tasks
+The ECS cluster (`paimana-cluster`) running active Fargate tasks for both frontend and backend services:
+![Amazon ECS Services & Tasks](docs/screenshots/ecs-services-running.png)
+
+#### 4. ALB Target Groups Health Status
+Both frontend (`paimana-fe-tg`) and backend (`paimana-be-tg`) target groups reporting 100% healthy targets across multiple availability zones:
+![Target Groups Healthy](docs/screenshots/target-groups-healthy.png)
+
+#### 5. Amazon ECR Repositories & Immutable Tagging
+ECR private repositories with production Docker images tagged with Git commit SHA `b5fdbea`:
+![Amazon ECR Repositories](docs/screenshots/ecr-images.png)
+
+#### 6. GitHub Actions CI/CD Pipeline
+Continuous integration pipeline completing test and build stages successfully on the `main` branch:
+![GitHub Actions CI/CD Pipeline](docs/screenshots/deployment-status.png)
+
 
 ## Team Contribution
 
