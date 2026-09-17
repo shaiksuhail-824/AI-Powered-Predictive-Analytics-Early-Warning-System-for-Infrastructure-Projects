@@ -49,30 +49,29 @@ export default function Sidebar() {
   else if (user.role === 'AGENCY_CONTRACTOR') links = agencyLinks;
 
   return (
-    <aside className="w-64 bg-white border-r border-border h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto hidden md:block flex-shrink-0">
-      <div className="p-4 flex flex-col gap-2">
-        <div className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-2 px-3">
-          Navigation
+    <nav aria-label="Portal Navigation" className="w-full bg-white border-b border-border sticky top-16 z-40 shadow-xs">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto py-2.5">
+          {links.map((link) => {
+            const isActive = pathname.startsWith(link.href);
+            const Icon = link.icon;
+            return (
+              <Link 
+                key={link.name} 
+                href={link.href}
+                className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap transition-colors shrink-0 ${
+                  isActive 
+                    ? 'bg-mospi-50 text-mospi-700 font-semibold border border-mospi-200' 
+                    : 'text-text-secondary hover:bg-slate-100 hover:text-text-primary'
+                }`}
+              >
+                <Icon size={16} className={isActive ? 'text-mospi-600' : 'text-text-muted'} />
+                <span>{link.name}</span>
+              </Link>
+            );
+          })}
         </div>
-        {links.map((link) => {
-          const isActive = pathname.startsWith(link.href);
-          const Icon = link.icon;
-          return (
-            <Link 
-              key={link.name} 
-              href={link.href}
-              className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
-                isActive 
-                  ? 'bg-mospi-50 text-mospi-700 font-medium' 
-                  : 'text-text-secondary hover:bg-panel-hover hover:text-text-primary'
-              }`}
-            >
-              <Icon size={18} className={isActive ? 'text-mospi-600' : 'text-text-muted'} />
-              {link.name}
-            </Link>
-          );
-        })}
       </div>
-    </aside>
+    </nav>
   );
 }

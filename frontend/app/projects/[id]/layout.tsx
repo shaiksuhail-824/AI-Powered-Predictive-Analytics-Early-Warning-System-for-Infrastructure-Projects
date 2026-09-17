@@ -41,16 +41,14 @@ export default function ProjectLayout({
     return (
       <div className="min-h-screen flex flex-col bg-background">
         <Navbar />
-        <div className="flex flex-1 overflow-hidden">
-          <Sidebar />
-          <main className="flex-1 overflow-y-auto p-6 flex items-center justify-center">
-            <div className="text-center">
-              <h2 className="text-2xl font-bold text-text-primary">Project Not Found</h2>
-              <p className="text-text-secondary mt-2">The requested project ID does not exist or you don&apos;t have access.</p>
-              <button onClick={() => router.back()} className="mt-4 text-mospi-600 hover:underline">Go Back</button>
-            </div>
-          </main>
-        </div>
+        <Sidebar />
+        <main className="flex-1 w-full max-w-full p-4 sm:p-6 lg:p-8 flex items-center justify-center">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-text-primary">Project Not Found</h2>
+            <p className="text-text-secondary mt-2">The requested project ID does not exist or you don&apos;t have access.</p>
+            <button onClick={() => router.back()} className="mt-4 text-mospi-600 hover:underline">Go Back</button>
+          </div>
+        </main>
       </div>
     );
   }
@@ -68,10 +66,9 @@ export default function ProjectLayout({
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
-      <div className="flex flex-1 overflow-hidden">
-        <Sidebar />
-        <main className="flex-1 overflow-y-auto p-6">
-          <div className="max-w-7xl mx-auto space-y-6">
+      <Sidebar />
+      <main className="flex-1 w-full max-w-full p-4 sm:p-6 lg:p-8">
+        <div className="max-w-7xl mx-auto space-y-6">
             
             {/* Project Header */}
             <div>
@@ -123,7 +120,6 @@ export default function ProjectLayout({
 
           </div>
         </main>
-      </div>
     </div>
   );
 }

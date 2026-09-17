@@ -52,10 +52,9 @@ export default function ProjectsPage() {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
-      <div className="flex flex-1 overflow-hidden">
-        <Sidebar />
-        <main className="flex-1 overflow-y-auto p-6">
-          <div className="space-y-6 max-w-7xl mx-auto">
+      <Sidebar />
+      <main className="flex-1 w-full max-w-full p-4 sm:p-6 lg:p-8">
+        <div className="space-y-6 max-w-7xl mx-auto">
             <div>
               <h1 className="text-2xl font-bold text-text-primary flex items-center gap-3">
                 <FolderKanban className="text-mospi-500" size={28} />
@@ -157,7 +156,6 @@ export default function ProjectsPage() {
             </Card>
           </div>
         </main>
-      </div>
     </div>
   );
 }

@@ -38,12 +38,10 @@ export default function MinistryLayout({
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
-      <div className="flex flex-1 overflow-hidden">
-        <Sidebar />
-        <main className="flex-1 overflow-y-auto p-6">
-          {children}
-        </main>
-      </div>
+      <Sidebar />
+      <main className="flex-1 w-full max-w-full p-4 sm:p-6 lg:p-8">
+        {children}
+      </main>
     </div>
   );
 }
